@@ -99,6 +99,9 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile --ignore-scripts
 
+      - name: Expose bin from root node_modules
+        run: echo "$PWD/node_modules/.bin" >> $GITHUB_PATH
+
       # Restore Turborepo cache để build nhanh hơn
       - name: Restore Turbo cache
         uses: actions/cache@v4
