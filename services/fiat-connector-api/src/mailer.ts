@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
-import { MAIL_CONFIG } from "@wikialisa/config";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { MAIL_CONFIG } = require("@wikialisa/config/dist/server.js") as typeof import("@wikialisa/config/dist/server.js");
 
 export const mailer = nodemailer.createTransport({
   host:   MAIL_CONFIG.SMTP_HOST,

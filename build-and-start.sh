@@ -19,7 +19,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 LOG_DIR="$ROOT/.pm2/logs"
 TURBO="$ROOT/node_modules/.bin/turbo"
-PM2="$ROOT/node_modules/.bin/pm2"
+PM2="$(command -v pm2 2>/dev/null || echo "$ROOT/node_modules/.bin/pm2")"
 
 # ── Màu sắc ────────────────────────────────────────────────────────────────
 C_CYAN="\033[0;36m"; C_GREEN="\033[0;32m"; C_RED="\033[0;31m"
