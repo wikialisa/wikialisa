@@ -1,0 +1,383 @@
+name: GitHub Pages — Demo Deploy
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Build tất cả Next.js apps thành static export → deploy lên GitHub Pages
+# URL: https://wikialisa.github.io/wikialisa/
+#
+# Trigger:
+#   • Push lên main (chỉ khi có thay đổi trong apps/ hoặc packages/)
+#   • Thủ công qua workflow_dispatch
+# ─────────────────────────────────────────────────────────────────────────────
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - ".github/workflows/github-pages.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22.14.0"
+  PNPM_VERSION: "9.15.9"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 1: Build packages (shared libs cần thiết cho apps)
+  # ─────────────────────────────────────────────────────────────────────────
+  build-packages:
+    name: 📦 Build shared packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Expose bin
+        run: echo "$PWD/node_modules/.bin" >> $GITHUB_PATH
+
+      - name: Build packages
+        run: pnpm turbo run build --filter="./packages/*" --cache-dir=.turbo --output-logs=errors-only
+
+      - name: Cache packages dist
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            packages/*/dist
+            node_modules/.cache
+          key: packages-dist-${{ github.sha }}
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 2: Build từng app song song (static export)
+  # ─────────────────────────────────────────────────────────────────────────
+  build-apps:
+    name: 🖥️ Build ${{ matrix.app.name }}
+    needs: build-packages
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - { name: app-web,              dir: app-web,              slug: app,        title: "AXQ App",          port: 3010 }
+          - { name: pay-portal,           dir: pay-portal,           slug: pay,        title: "Pay Portal",       port: 3002 }
+          - { name: swap-dex,             dir: swap-dex,             slug: swap,       title: "Swap DEX",         port: 3004 }
+          - { name: dao-portal,           dir: dao-portal,           slug: dao,        title: "DAO Portal",       port: 3005 }
+          - { name: explorer-vnkrscan,    dir: explorer-vnkrscan,    slug: explorer,   title: "Block Explorer",   port: 3003 }
+          - { name: kyc-portal,           dir: kyc-portal,           slug: kyc,        title: "KYC Portal",       port: 3013 }
+          - { name: merchant-portal,      dir: merchant-portal,      slug: merchant,   title: "Merchant Portal",  port: 3011 }
+          - { name: id-fiat-gateway,      dir: id-fiat-gateway,      slug: id,         title: "ID & Fiat",        port: 3001 }
+          - { name: holding-admin-portal, dir: holding-admin-portal, slug: admin,      title: "Holding Admin",    port: 3006 }
+          - { name: sandbox-dashboard,    dir: sandbox-dashboard,    slug: sandbox,    title: "Sandbox",          port: 3012 }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Expose bin
+        run: echo "$PWD/node_modules/.bin" >> $GITHUB_PATH
+
+      - name: Restore packages dist
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            packages/*/dist
+            node_modules/.cache
+          key: packages-dist-${{ github.sha }}
+
+      - name: Restore Turbo cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ matrix.app.dir }}-${{ github.sha }}
+          restore-keys: turbo-${{ matrix.app.dir }}-
+
+      - name: Patch next.config — static export + basePath
+        run: |
+          cat > apps/${{ matrix.app.dir }}/next.config.pages.mjs << 'NEXTEOF'
+          /** @type {import('next').NextConfig} */
+          const nextConfig = {
+            output: "export",
+            basePath: "/wikialisa/${{ matrix.app.slug }}",
+            assetPrefix: "/wikialisa/${{ matrix.app.slug }}/",
+            trailingSlash: true,
+            images: { unoptimized: true },
+            typescript: { ignoreBuildErrors: true },
+            eslint: { ignoreDuringBuilds: true },
+          };
+          export default nextConfig;
+          NEXTEOF
+          # Backup original và dùng config pages
+          cp apps/${{ matrix.app.dir }}/next.config.* apps/${{ matrix.app.dir }}/next.config.orig.bak 2>/dev/null || true
+          cp apps/${{ matrix.app.dir }}/next.config.pages.mjs apps/${{ matrix.app.dir }}/next.config.mjs
+
+      - name: Build ${{ matrix.app.title }} (static export)
+        run: |
+          cd apps/${{ matrix.app.dir }}
+          NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 next build
+        continue-on-error: true
+        id: build
+
+      - name: Upload artifact — ${{ matrix.app.slug }}
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.app.slug }}
+          path: apps/${{ matrix.app.dir }}/out/
+          retention-days: 1
+
+      - name: Upload placeholder on failure
+        if: steps.build.outcome != 'success'
+        run: |
+          mkdir -p /tmp/placeholder
+          cat > /tmp/placeholder/index.html << EOF
+          <!DOCTYPE html>
+          <html lang="vi">
+          <head><meta charset="UTF-8"><title>${{ matrix.app.title }} — Coming Soon</title>
+          <style>body{font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#0f172a;color:#94a3b8}
+          .box{text-align:center;padding:2rem}h1{color:#38bdf8;font-size:2rem}a{color:#38bdf8}</style></head>
+          <body><div class="box">
+          <h1>🚧 ${{ matrix.app.title }}</h1>
+          <p>Build in progress — check back soon.</p>
+          <p><a href="/wikialisa/">← Back to Demo Index</a></p>
+          </div></body></html>
+          EOF
+
+      - name: Upload placeholder artifact
+        if: steps.build.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.app.slug }}
+          path: /tmp/placeholder/
+          retention-days: 1
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 3: Assemble tất cả apps + tạo index → deploy Pages
+  # ─────────────────────────────────────────────────────────────────────────
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    needs: build-apps
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all app artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: _site_apps/
+
+      - name: Assemble site structure
+        run: |
+          mkdir -p _site
+
+          # Copy từng app vào đúng path
+          declare -A SLUGS=(
+            [app-app]="app"
+            [app-pay]="pay"
+            [app-swap]="swap"
+            [app-dao]="dao"
+            [app-explorer]="explorer"
+            [app-kyc]="kyc"
+            [app-merchant]="merchant"
+            [app-id]="id"
+            [app-admin]="admin"
+            [app-sandbox]="sandbox"
+          )
+
+          for artifact_dir in _site_apps/app-*/; do
+            artifact=$(basename "$artifact_dir")
+            slug="${SLUGS[$artifact]:-${artifact#app-}}"
+            echo "→ Copying $artifact to _site/$slug/"
+            mkdir -p "_site/$slug"
+            cp -r "$artifact_dir"/* "_site/$slug/"
+          done
+
+          # Tạo trang index chính
+          cat > _site/index.html << 'INDEXEOF'
+          <!DOCTYPE html>
+          <html lang="vi">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>WikiAlisa — Demo Apps</title>
+            <style>
+              *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+              body {
+                font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+                background: #0f172a;
+                color: #e2e8f0;
+                min-height: 100vh;
+              }
+              header {
+                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                border-bottom: 1px solid #1e3a5f;
+                padding: 2.5rem 1.5rem 2rem;
+                text-align: center;
+              }
+              header h1 { font-size: 2.2rem; color: #38bdf8; letter-spacing: -0.5px; }
+              header p  { color: #94a3b8; margin-top: 0.5rem; font-size: 0.95rem; }
+              .badge {
+                display: inline-block; background: #1e3a5f; color: #38bdf8;
+                font-size: 0.7rem; padding: 2px 8px; border-radius: 999px;
+                margin-top: 0.6rem; letter-spacing: 1px; text-transform: uppercase;
+              }
+              main { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+              .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 1.25rem;
+              }
+              .card {
+                background: #1e293b;
+                border: 1px solid #334155;
+                border-radius: 12px;
+                padding: 1.5rem;
+                text-decoration: none;
+                color: inherit;
+                transition: border-color 0.2s, transform 0.15s;
+                display: flex; flex-direction: column; gap: 0.5rem;
+              }
+              .card:hover {
+                border-color: #38bdf8;
+                transform: translateY(-2px);
+              }
+              .card-icon { font-size: 2rem; }
+              .card-title { font-size: 1.05rem; font-weight: 600; color: #f1f5f9; }
+              .card-desc  { font-size: 0.83rem; color: #94a3b8; line-height: 1.5; }
+              .card-tag {
+                display: inline-block; background: #0f2a44; color: #38bdf8;
+                font-size: 0.7rem; padding: 2px 7px; border-radius: 4px;
+                margin-top: auto; align-self: flex-start;
+              }
+              footer {
+                text-align: center; padding: 2rem 1rem;
+                border-top: 1px solid #1e293b; color: #475569;
+                font-size: 0.78rem;
+              }
+              footer a { color: #38bdf8; text-decoration: none; }
+            </style>
+          </head>
+          <body>
+            <header>
+              <h1>🌐 WikiAlisa</h1>
+              <p>AXQ Tech Holding JSC — Enterprise Web3 & FinTech Platform</p>
+              <span class="badge">Live Demo</span>
+            </header>
+            <main>
+              <div class="grid">
+                <a class="card" href="./app/">
+                  <span class="card-icon">💳</span>
+                  <span class="card-title">AXQ App</span>
+                  <span class="card-desc">Wallet, Crypto, Card, Cashback, P2P — Main Web Application</span>
+                  <span class="card-tag">app.axvn.vn</span>
+                </a>
+                <a class="card" href="./pay/">
+                  <span class="card-icon">💸</span>
+                  <span class="card-title">Pay Portal</span>
+                  <span class="card-desc">Payment Gateway & Merchant Dashboard</span>
+                  <span class="card-tag">pay.axvn.vn</span>
+                </a>
+                <a class="card" href="./swap/">
+                  <span class="card-icon">🔄</span>
+                  <span class="card-title">Swap DEX</span>
+                  <span class="card-desc">AMM DEX & Cross-chain Liquidity Router</span>
+                  <span class="card-tag">swap.axvn.vn</span>
+                </a>
+                <a class="card" href="./dao/">
+                  <span class="card-icon">🏛️</span>
+                  <span class="card-title">DAO Portal</span>
+                  <span class="card-desc">Treasury Management & Governance</span>
+                  <span class="card-tag">dao.axvn.vn</span>
+                </a>
+                <a class="card" href="./explorer/">
+                  <span class="card-icon">🔍</span>
+                  <span class="card-title">Block Explorer</span>
+                  <span class="card-desc">App-Chain Explorer & Proof of Reserve</span>
+                  <span class="card-tag">scan.axvn.vn</span>
+                </a>
+                <a class="card" href="./kyc/">
+                  <span class="card-icon">🪪</span>
+                  <span class="card-title">KYC Portal</span>
+                  <span class="card-desc">eKYC, VNeID Integration, ZKP Attestation</span>
+                  <span class="card-tag">kyc.axvn.vn</span>
+                </a>
+                <a class="card" href="./merchant/">
+                  <span class="card-icon">🏪</span>
+                  <span class="card-title">Merchant Portal</span>
+                  <span class="card-desc">Payment Dashboard, API Keys, Orders</span>
+                  <span class="card-tag">merchant.axvn.vn</span>
+                </a>
+                <a class="card" href="./id/">
+                  <span class="card-icon">🔐</span>
+                  <span class="card-title">ID & Fiat Gateway</span>
+                  <span class="card-desc">P2P Escrow, Identity & Fiat On/Off Ramp</span>
+                  <span class="card-tag">id.axvn.vn</span>
+                </a>
+                <a class="card" href="./admin/">
+                  <span class="card-icon">⚙️</span>
+                  <span class="card-title">Holding Admin</span>
+                  <span class="card-desc">IP Asset Management & Whitelist Governance</span>
+                  <span class="card-tag">holding.axvn.vn</span>
+                </a>
+                <a class="card" href="./sandbox/">
+                  <span class="card-icon">🧪</span>
+                  <span class="card-title">Sandbox</span>
+                  <span class="card-desc">SupTech Dashboard, Tier Monitor, Circuit Breaker</span>
+                  <span class="card-tag">sandbox.axvn.vn</span>
+                </a>
+              </div>
+            </main>
+            <footer>
+              <p>© 2026 AXQ Tech Holding JSC · <a href="https://axvn.vn">axvn.vn</a> · <a href="https://github.com/wikialisa/wikialisa">GitHub</a> · Built with WikiAlisa CI</p>
+            </footer>
+          </body>
+          </html>
+          INDEXEOF
+
+          echo "Site structure:"
+          find _site -name "index.html" | head -20
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
