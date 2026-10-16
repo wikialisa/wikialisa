@@ -123,13 +123,17 @@ jobs:
 
       - name: Publish to npmjs.com
         if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: npm publish ${{ matrix.package.dir }} --access public --provenance --no-git-checks
+        run: |
+          cd ${{ matrix.package.dir }}
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Dry-run publish (simulate)
         if: ${{ github.event.inputs.dry_run == 'true' }}
-        run: npm publish ${{ matrix.package.dir }} --access public --dry-run --no-git-checks
+        run: |
+          cd ${{ matrix.package.dir }}
+          npm publish --access public --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
