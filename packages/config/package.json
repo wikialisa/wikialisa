@@ -1,6 +1,6 @@
 {
   "name": "@wikialisa/config",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Environment constants, Program IDs, Seed PDAs, RPC endpoints and feature flags for the WIKIALISA ($AXQ) ecosystem",
   "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
   "license": "BSL-1.1",

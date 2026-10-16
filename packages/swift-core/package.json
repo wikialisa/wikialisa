@@ -1,6 +1,6 @@
 {
   "name": "@wikialisa/swift-core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "WIKIALISA SWIFT Core — MT/MX message builders, ISO 20022 parsers, LAU/RMA security, Zod schemas, UETR and Redis event bus client",
   "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
   "license": "BSL-1.1",

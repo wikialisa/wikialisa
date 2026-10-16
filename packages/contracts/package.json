@@ -1,6 +1,6 @@
 {
   "name": "@wikialisa/contracts",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "WIKIALISA Bophades Modular Smart Contracts — AXQ Reserve Currency, Governance, Treasury, VASP & Compliance (EVM + Solana)",
   "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
   "license": "BSL-1.1",
