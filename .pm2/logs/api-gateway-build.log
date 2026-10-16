@@ -1,0 +1,4 @@
+
+> @wikialisa/api-gateway@1.0.0 build /root/workspace/services/api-gateway
+> tsc --outDir dist
+

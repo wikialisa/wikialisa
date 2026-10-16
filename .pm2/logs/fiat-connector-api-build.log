@@ -1,0 +1,7 @@
+
+> @wikialisa/fiat-connector-api@0.1.0 build /root/workspace/services/fiat-connector-api
+> tsc
+
+src/mailer.ts(2,10): error TS2305: Module '"@wikialisa/config"' has no exported member 'MAIL_CONFIG'.
+ ELIFECYCLE  Command failed with exit code 2.
+ WARN   Local package.json exists, but node_modules missing, did you mean to install?
