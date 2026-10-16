@@ -81,17 +81,24 @@ function setOutput(key, value) {
 // ─── Main ─────────────────────────────────────────────────────────────────
 const PACKAGE_FILTER = process.env.PACKAGE_FILTER?.trim() ?? "";
 
-// Lấy tag gần nhất trước HEAD
-const prevTag = run("git describe --tags --abbrev=0 HEAD^ 2>/dev/null || git rev-list --max-parents=0 HEAD");
-console.log(`\n🔍 Comparing against: ${prevTag || "(no previous tag — include all)"}`);
+// Lấy tag gần nhất TRƯỚC tag hiện tại (hoặc trước HEAD)
+// git describe --tags --abbrev=0 HEAD~1 → tag ngay trước commit hiện tại
+const currentTag = run("git tag --points-at HEAD");
+const prevTag    = currentTag
+  ? run(`git describe --tags --abbrev=0 ${currentTag}^ 2>/dev/null`)
+  : run("git describe --tags --abbrev=0 HEAD^ 2>/dev/null");
+
+console.log(`\n🏷️  Current tag : ${currentTag || "(none)"}`);
+console.log(`🔍 Previous tag : ${prevTag  || "(none — will publish ALL)"}`);
 
 // Lấy danh sách file thay đổi từ prevTag đến HEAD
 const changedFiles = prevTag
   ? run(`git diff --name-only ${prevTag} HEAD`).split("\n").filter(Boolean)
-  : []; // nếu không có tag trước → bao gồm tất cả
+  : [];
 
-const forceAll = changedFiles.length === 0;
-if (forceAll) console.log("⚠  No previous tag found — publishing ALL packages\n");
+// Không có prevTag → đây là lần release đầu tiên → publish tất cả
+const forceAll = !prevTag || changedFiles.length === 0;
+if (forceAll) console.log("⚠  No previous tag — publishing ALL packages\n");
 
 const matrix = [];
 
