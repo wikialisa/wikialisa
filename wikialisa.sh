@@ -18,7 +18,11 @@
 #    ./wikialisa.sh dev:services     # PM2 dev — chỉ services
 #    ./wikialisa.sh api              # start api-gateway (dist mode, port 5000)
 #    ./wikialisa.sh api stop/status/logs/restart
-#    ./wikialisa.sh start            # PM2 production
+#    ./wikialisa.sh build-start      # build frontend+backend → PM2 start (alias: bs, prod)
+#    ./wikialisa.sh build-start frontend  # chỉ build frontend → start
+#    ./wikialisa.sh build-start backend   # chỉ build backend → start
+#    ./wikialisa.sh build-start start-only # skip build, chỉ PM2 start
+#    ./wikialisa.sh start            # PM2 production (không build)
 #    ./wikialisa.sh stop             # PM2 stop all
 #    ./wikialisa.sh restart          # PM2 reload --update-env
 #    ./wikialisa.sh status           # pm2 ls + metrics
