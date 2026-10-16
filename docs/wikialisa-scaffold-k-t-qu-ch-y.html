@@ -1,0 +1,337 @@
+
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wikialisa Scaffold — Kết quả chạy</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #ffffff;
+    color: #1f2328;
+    padding: 32px 16px;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f2328;
+    border-bottom: 2px solid #3b82d4;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 12px;
+    color: #57606a;
+    margin-bottom: 28px;
+  }
+  .meta-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .meta-chip {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .meta-chip strong { color: #1f2328; }
+
+  .section {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .section-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: #1f2328;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 12px;
+  }
+  .badge-ok   { background: #d1fae5; color: #065f46; }
+  .badge-skip { background: #fef3c7; color: #92400e; }
+  .badge-info { background: #dbeafe; color: #1e40af; }
+
+  .section-body { padding: 12px 16px; }
+
+  .item-list { list-style: none; }
+  .item-list li {
+    padding: 3px 0;
+    font-size: 13px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .icon-ok   { color: #16a34a; font-size: 12px; }
+  .icon-info { color: #3b82d4; font-size: 12px; }
+  .icon-warn { color: #d97706; font-size: 12px; }
+
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 12px;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #7c5cd8;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .dockerfile-tag {
+    font-size: 11px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: #1f2328;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dockerfile-tag span { color: #57606a; font-size: 10px; }
+
+  .run-cmd {
+    background: #1f2328;
+    color: #f0f6fc;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 13px;
+    margin: 24px 0 16px;
+  }
+  .run-cmd .prompt { color: #7ee787; }
+  .run-cmd .cmd    { color: #79c0ff; }
+
+  .idempotent-note {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #166534;
+    margin-top: 12px;
+  }
+
+  .footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Wikialisa Scaffold — Kết quả chạy</h1>
+  <p class="subtitle">AXQ Tech Holding JSC · Monorepo pnpm + Turborepo · Node 22 · pnpm 9.15.9</p>
+
+  <div class="meta-row">
+    <div class="meta-chip"><strong>Lệnh</strong>: ./wikialisa.sh scaffold</div>
+    <div class="meta-chip"><strong>Hạng mục</strong>: 9 / 9 ✓</div>
+    <div class="meta-chip"><strong>Dockerfile</strong>: 19 total (8 backend + 11 frontend)</div>
+    <div class="meta-chip"><strong>Idempotent</strong>: có — an toàn chạy nhiều lần</div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 1 — 11 Dockerfile cho frontend apps</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="dockerfile-tag">Dockerfile.app-web <span>:3010 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.id-fiat-gateway <span>:3001 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.pay-portal <span>:3002 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.explorer-vnkrscan <span>:3003 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.swap-dex <span>:3004 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.dao-portal <span>:3005 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.holding-admin-portal <span>:3006 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.digital-twin-engine <span>:3007 Plain Node</span></div>
+        <div class="dockerfile-tag">Dockerfile.kyc-portal <span>:3013 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.merchant-portal <span>:3011 Next.js</span></div>
+        <div class="dockerfile-tag">Dockerfile.sandbox-dashboard <span>:3012 Next.js</span></div>
+      </div>
+      <ul class="item-list" style="margin-top:10px">
+        <li><span class="icon-info">→</span> Pattern: <code>base → builder → runner</code>, heredoc <code>&lt;&lt; 'EOF'</code> (no variable expansion)</li>
+        <li><span class="icon-info">→</span> Stage base: <code>node:22-alpine</code> + corepack pnpm@9.15.9</li>
+        <li><span class="icon-info">→</span> Next.js: <code>NEXT_TELEMETRY_DISABLED=1</code>, <code>HOSTNAME=0.0.0.0</code>, copy <code>.next/standalone</code></li>
+        <li><span class="icon-info">→</span> digital-twin-engine: copy <code>dist/</code> + <code>node_modules/</code>, CMD <code>node dist/index.js</code></li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 2 — docker-compose.yml</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> Append 11 service block vào <code>deploy/docker/docker-compose.yml</code></li>
+        <li><span class="icon-ok">✔</span> Image: <code>ghcr.io/axqtech/&lt;service&gt;:${TAG:-latest}</code></li>
+        <li><span class="icon-ok">✔</span> <code>container_name: wikialisa-&lt;service&gt;</code>, <code>restart: unless-stopped</code></li>
+        <li><span class="icon-ok">✔</span> <code>digital-twin-engine</code> → <code>depends_on: mongodb</code></li>
+        <li><span class="icon-ok">✔</span> 10 app còn lại → <code>depends_on: api-gateway</code></li>
+        <li><span class="icon-ok">✔</span> Thêm network <code>wikialisa-net</code> cho tất cả frontend service</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 3 — docker-compose.dev.yml</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> Append 11 dev override vào <code>deploy/docker/docker-compose.dev.yml</code></li>
+        <li><span class="icon-ok">✔</span> Mount: <code>../../apps/&lt;app&gt;:/app/apps/&lt;app&gt;</code></li>
+        <li><span class="icon-ok">✔</span> Env: <code>NODE_ENV: development</code></li>
+        <li><span class="icon-ok">✔</span> Command: <code>pnpm --filter &lt;app&gt; dev</code></li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 4 — deploy/docker/build-images.sh</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> Inject 11 entry vào mảng <code>DOCKERFILES</code> bằng <code>sed -i</code></li>
+        <li><span class="icon-ok">✔</span> Tổng: 19 service có thể build (8 backend + 11 frontend)</li>
+        <li><span class="icon-info">→</span> Chạy lần 2: phát hiện đã có → bỏ qua (idempotent)</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 5 — .github/workflows/publish-docker.yml</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> Inject 11 matrix entry với <code>service</code>, <code>dockerfile</code>, <code>image</code>, <code>target: runner</code></li>
+        <li><span class="icon-ok">✔</span> Image format: <code>ghcr.io/axqtech/&lt;service&gt;</code></li>
+        <li><span class="icon-info">→</span> Chạy lần 2: phát hiện đã có → bỏ qua (idempotent)</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 6 — Patch next.config.* (output: standalone)</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> Kiểm tra <code>grep -rq "output.*standalone"</code> từng app</li>
+        <li><span class="icon-ok">✔</span> 10/10 app đã được patch <code>output: "standalone"</code> vào <code>next.config.mjs</code></li>
+        <li><span class="icon-info">→</span> Logic 3 fallback: ESM <code>const nextConfig</code> / CJS <code>module.exports</code> / generic <code>{</code></li>
+        <li><span class="icon-info">→</span> Chạy lần 2: tất cả detect "đã có" → giữ nguyên</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 7 — turbo.json globalEnv += AUTH_MODE</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> <code>"AUTH_MODE"</code> đã thêm vào mảng <code>globalEnv</code> trong <code>turbo.json</code></li>
+        <li><span class="icon-ok">✔</span> Thực thi qua <code>jq</code> (primary) / <code>sed</code> (fallback)</li>
+        <li><span class="icon-info">→</span> Chạy lần 2: detect đã có → bỏ qua (idempotent)</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 8 — Tái tạo pnpm-lock.yaml</span>
+      <span class="badge badge-skip">↷ SKIPPED</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> <code>@wikialisa/mongo-db</code> đã có trong <code>pnpm-lock.yaml</code></li>
+        <li><span class="icon-info">→</span> Điều kiện không kích hoạt → bỏ qua <code>pnpm install --no-frozen-lockfile</code></li>
+        <li><span class="icon-info">→</span> Sẽ tự động chạy nếu lockfile thiếu package này</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Section 9 — Xóa import thừa deletePostOtpStep</span>
+      <span class="badge badge-ok">✓ DONE</span>
+    </div>
+    <div class="section-body">
+      <ul class="item-list">
+        <li><span class="icon-ok">✔</span> Xóa <code>deletePostOtpStep</code> khỏi import trong <code>services/api-gateway/src/routes/auth.route.ts</code></li>
+        <li><span class="icon-ok">✔</span> Áp dụng 4-case sed: single-line, multi-line riêng, trailing-shared, leading</li>
+        <li><span class="icon-ok">✔</span> <code>setPostOtpStep</code> và <code>getPostOtpStep</code> vẫn còn nguyên</li>
+        <li><span class="icon-info">→</span> Chạy lần 2: detect "không có" → bỏ qua</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="run-cmd">
+    <span class="prompt">$</span> <span class="cmd">./wikialisa.sh scaffold</span>
+    <span style="color:#8b949e;margin-left:16px"># hoặc option 17 trong interactive menu</span>
+  </div>
+
+  <div class="idempotent-note">
+    <strong>Idempotent:</strong> Script phát hiện trạng thái hiện tại trước khi thực thi. Chạy nhiều lần trên cùng repo không gây trùng lặp hay hỏng file. Tất cả 9 section đã pass lần chạy thứ 2 không có lỗi.
+  </div>
+
+  <div class="footer">
+    Made with IBM Bob
+  </div>
+
+</div>
+</body>
+</html>

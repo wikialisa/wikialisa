@@ -1,0 +1,34 @@
+# ─── Dockerfile: role-engine ─────────────────────────────────────────────────
+# Service: @wikialisa/role-engine
+# Plain Node.js worker (no TypeScript build step) — Global Leadership Automation
+# Port: none (internal scheduled worker)
+# Stages: base → runner | dev
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM node:22-alpine AS base
+WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+
+# ── Runner ────────────────────────────────────────────────────────────────────
+# role-engine is plain JS — no compilation needed, install and run directly
+FROM base AS runner
+ENV NODE_ENV=production
+
+COPY packages/types/package.json   ./packages/types/package.json
+COPY packages/config/package.json  ./packages/config/package.json
+COPY services/role-engine          ./services/role-engine
+
+RUN pnpm install --frozen-lockfile --prefer-offline --filter @wikialisa/role-engine...
+
+HEALTHCHECK --interval=60s --timeout=5s --retries=3 \
+  CMD node -e "process.exit(0)" || exit 1
+
+CMD ["node", "services/role-engine/role-engine.js"]
+
+# ── Dev stage (file-watching) ─────────────────────────────────────────────────
+FROM runner AS dev
+ENV NODE_ENV=development
+CMD ["node", "--watch", "services/role-engine/role-engine.js"]

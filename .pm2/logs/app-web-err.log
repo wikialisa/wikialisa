@@ -1,0 +1,234 @@
+ ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+Module not found: Can't resolve './AxvnLogo'
+[0m [90m 4 |[39m [90m */[39m[0m
+[0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+[0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+[0m [90m   |[39m [31m[1m^[22m[39m[0m
+[0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+[0m [90m 8 |[39m[0m
+[0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+../../packages/ui-kit/src/components/Logo/index.ts
+../../packages/ui-kit/src/index.ts
+./src/app/(app)/layout.tsx
+ ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+Module not found: Can't resolve './AxvnLogo'
+[0m [90m 4 |[39m [90m */[39m[0m
+[0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+[0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+[0m [90m   |[39m [31m[1m^[22m[39m[0m
+[0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+[0m [90m 8 |[39m[0m
+[0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+../../packages/ui-kit/src/components/Logo/index.ts
+../../packages/ui-kit/src/index.ts
+./src/app/(app)/home/page.tsx
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/root/workspace/apps/app-web/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/root/workspace/apps/app-web/.next/cache/webpack/client-development-fallback/0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/root/workspace/apps/app-web/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/root/workspace/apps/app-web/.next/cache/webpack/client-development-fallback/0.pack.gz'
+2026-10-15 10:47:21 +00:00:  ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+2026-10-15 10:47:21 +00:00: Module not found: Can't resolve './AxvnLogo'
+2026-10-15 10:47:21 +00:00: [0m [90m 4 |[39m [90m */[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+2026-10-15 10:47:21 +00:00: [0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m   |[39m [31m[1m^[22m[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 8 |[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+2026-10-15 10:47:21 +00:00: 
+2026-10-15 10:47:21 +00:00: https://nextjs.org/docs/messages/module-not-found
+2026-10-15 10:47:21 +00:00: 
+2026-10-15 10:47:21 +00:00: Import trace for requested module:
+2026-10-15 10:47:21 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:47:21 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:47:21 +00:00: ./src/app/(app)/layout.tsx
+2026-10-15 10:47:21 +00:00:  ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+2026-10-15 10:47:21 +00:00: Module not found: Can't resolve './AxvnLogo'
+2026-10-15 10:47:21 +00:00: [0m [90m 4 |[39m [90m */[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+2026-10-15 10:47:21 +00:00: [0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m   |[39m [31m[1m^[22m[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 8 |[39m[0m
+2026-10-15 10:47:21 +00:00: [0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+2026-10-15 10:47:21 +00:00: 
+2026-10-15 10:47:21 +00:00: https://nextjs.org/docs/messages/module-not-found
+2026-10-15 10:47:21 +00:00: 
+2026-10-15 10:47:21 +00:00: Import trace for requested module:
+2026-10-15 10:47:21 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:47:21 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:47:21 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:47:24 +00:00:  ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+2026-10-15 10:47:24 +00:00: Module not found: Can't resolve './AxvnLogo'
+2026-10-15 10:47:24 +00:00: [0m [90m 4 |[39m [90m */[39m[0m
+2026-10-15 10:47:24 +00:00: [0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+2026-10-15 10:47:24 +00:00: [0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:47:24 +00:00: [0m [90m   |[39m [31m[1m^[22m[39m[0m
+2026-10-15 10:47:24 +00:00: [0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:47:24 +00:00: [0m [90m 8 |[39m[0m
+2026-10-15 10:47:24 +00:00: [0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+2026-10-15 10:47:24 +00:00: 
+2026-10-15 10:47:24 +00:00: https://nextjs.org/docs/messages/module-not-found
+2026-10-15 10:47:24 +00:00: 
+2026-10-15 10:47:24 +00:00: Import trace for requested module:
+2026-10-15 10:47:24 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:47:24 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:47:24 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:47:42 +00:00:  ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+2026-10-15 10:47:43 +00:00: file:///root/workspace/apps/app-web/next.config.mjs:6
+2026-10-15 10:47:43 +00:00:     const fs = await import("fs");
+2026-10-15 10:47:43 +00:00:                ^^^^^
+2026-10-15 10:47:43 +00:00: 
+2026-10-15 10:47:43 +00:00: SyntaxError: Unexpected reserved word
+2026-10-15 10:47:43 +00:00:     at compileSourceTextModule (node:internal/modules/esm/utils:318:16)
+2026-10-15 10:47:43 +00:00:     at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:90:18)
+2026-10-15 10:47:43 +00:00:     at #translate (node:internal/modules/esm/loader:451:20)
+2026-10-15 10:47:43 +00:00:     at afterLoad (node:internal/modules/esm/loader:507:29)
+2026-10-15 10:47:43 +00:00:     at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:512:12)
+2026-10-15 10:47:43 +00:00:     at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:555:36)
+2026-10-15 10:47:43 +00:00:     at afterResolve (node:internal/modules/esm/loader:603:52)
+2026-10-15 10:47:43 +00:00:     at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:609:12)
+2026-10-15 10:47:43 +00:00:     at node:internal/modules/esm/loader:628:32
+2026-10-15 10:47:43 +00:00:     at TracingChannel.tracePromise (node:diagnostics_channel:362:14)
+2026-10-15 10:47:43 +00:00: 
+2026-10-15 10:47:43 +00:00: Node.js v24.15.0
+2026-10-15 10:48:29 +00:00:  ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+2026-10-15 10:48:29 +00:00: Module not found: Can't resolve './AxvnLogo'
+2026-10-15 10:48:29 +00:00: [0m [90m 4 |[39m [90m */[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+2026-10-15 10:48:29 +00:00: [0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m   |[39m [31m[1m^[22m[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 8 |[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+2026-10-15 10:48:29 +00:00: 
+2026-10-15 10:48:29 +00:00: https://nextjs.org/docs/messages/module-not-found
+2026-10-15 10:48:29 +00:00: 
+2026-10-15 10:48:29 +00:00: Import trace for requested module:
+2026-10-15 10:48:29 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:48:29 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:48:29 +00:00: ./src/app/(app)/layout.tsx
+2026-10-15 10:48:29 +00:00:  ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+2026-10-15 10:48:29 +00:00: Module not found: Can't resolve './AxvnLogo'
+2026-10-15 10:48:29 +00:00: [0m [90m 4 |[39m [90m */[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+2026-10-15 10:48:29 +00:00: [0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m   |[39m [31m[1m^[22m[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 8 |[39m[0m
+2026-10-15 10:48:29 +00:00: [0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+2026-10-15 10:48:29 +00:00: 
+2026-10-15 10:48:29 +00:00: https://nextjs.org/docs/messages/module-not-found
+2026-10-15 10:48:29 +00:00: 
+2026-10-15 10:48:29 +00:00: Import trace for requested module:
+2026-10-15 10:48:29 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:48:29 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:48:29 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:48:32 +00:00:  ⨯ ../../packages/ui-kit/src/components/Logo/LogoGuide.tsx:6:1
+2026-10-15 10:48:32 +00:00: Module not found: Can't resolve './AxvnLogo'
+2026-10-15 10:48:32 +00:00: [0m [90m 4 |[39m [90m */[39m[0m
+2026-10-15 10:48:32 +00:00: [0m [90m 5 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m[0m
+2026-10-15 10:48:32 +00:00: [0m[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mAxvnLogo[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:48:32 +00:00: [0m [90m   |[39m [31m[1m^[22m[39m[0m
+2026-10-15 10:48:32 +00:00: [0m [90m 7 |[39m [36mimport[39m type { [33mLogoVariant[39m } [36mfrom[39m [32m"./AxvnLogo"[39m[33m;[39m[0m
+2026-10-15 10:48:32 +00:00: [0m [90m 8 |[39m[0m
+2026-10-15 10:48:32 +00:00: [0m [90m 9 |[39m [36mconst[39m [33mVARIANTS[39m[33m:[39m { variant[33m:[39m [33mLogoVariant[39m[33m;[39m bg[33m:[39m string[33m;[39m label[33m:[39m string[33m;[39m rule[33m:[39m string }[] [33m=[39m [[0m
+2026-10-15 10:48:32 +00:00: 
+2026-10-15 10:48:32 +00:00: https://nextjs.org/docs/messages/module-not-found
+2026-10-15 10:48:32 +00:00: 
+2026-10-15 10:48:32 +00:00: Import trace for requested module:
+2026-10-15 10:48:32 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:48:32 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:48:32 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:11 +00:00:  ⚠ ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:11 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:11 +00:00: 
+2026-10-15 10:50:11 +00:00: Import trace for requested module:
+2026-10-15 10:50:11 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:11 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:11 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:11 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:11 +00:00:  ⚠ ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:11 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:11 +00:00: 
+2026-10-15 10:50:11 +00:00: Import trace for requested module:
+2026-10-15 10:50:11 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:11 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:11 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:11 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:12 +00:00:  ⚠ ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:12 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:12 +00:00: 
+2026-10-15 10:50:12 +00:00: Import trace for requested module:
+2026-10-15 10:50:12 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:12 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:12 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:12 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:12 +00:00:  ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+2026-10-15 10:50:12 +00:00:  ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+2026-10-15 10:50:12 +00:00:  ⚠ ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:12 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:12 +00:00: 
+2026-10-15 10:50:12 +00:00: Import trace for requested module:
+2026-10-15 10:50:12 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:12 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:12 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:12 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:13 +00:00:  ⚠ ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:13 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:13 +00:00: 
+2026-10-15 10:50:13 +00:00: Import trace for requested module:
+2026-10-15 10:50:13 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:13 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:13 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:13 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:13 +00:00: 
+2026-10-15 10:50:13 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:13 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:13 +00:00: 
+2026-10-15 10:50:13 +00:00: Import trace for requested module:
+2026-10-15 10:50:13 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:13 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:13 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:13 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:14 +00:00:  ⚠ ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:14 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:14 +00:00: 
+2026-10-15 10:50:14 +00:00: Import trace for requested module:
+2026-10-15 10:50:14 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:14 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:14 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:14 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:14 +00:00: 
+2026-10-15 10:50:14 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:14 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:14 +00:00: 
+2026-10-15 10:50:14 +00:00: Import trace for requested module:
+2026-10-15 10:50:14 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:14 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:14 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:14 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:14 +00:00:  ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+2026-10-15 10:50:17 +00:00:  ⚠ ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:17 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:17 +00:00: 
+2026-10-15 10:50:17 +00:00: Import trace for requested module:
+2026-10-15 10:50:17 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:17 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:17 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:17 +00:00: ./src/app/(app)/home/page.tsx
+2026-10-15 10:50:17 +00:00: 
+2026-10-15 10:50:17 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:17 +00:00: export 'VnkrLogo' (reexported as 'VnkrLogo') was not found in './VnkrLogo' (possible exports: AxvnLogo)
+2026-10-15 10:50:17 +00:00: 
+2026-10-15 10:50:17 +00:00: Import trace for requested module:
+2026-10-15 10:50:17 +00:00: ../../packages/ui-kit/src/components/Logo/AxvnLogo.tsx
+2026-10-15 10:50:17 +00:00: ../../packages/ui-kit/src/components/Logo/index.ts
+2026-10-15 10:50:17 +00:00: ../../packages/ui-kit/src/index.ts
+2026-10-15 10:50:17 +00:00: ./src/app/(app)/home/page.tsx

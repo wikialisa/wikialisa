@@ -1,0 +1,77 @@
+{
+  "name": "@wikialisa/swift-gateway",
+  "version": "1.0.0",
+  "description": "WIKIALISA SWIFT Gateway — OAuth2, GPI Tracker, Pre-Validation, BIC Directory, PKI, Java Bridge, EVM/TRON escrow and Audit Compliance",
+  "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
+  "license": "BSL-1.1",
+  "homepage": "https://github.com/wikialisa/wikialisa#readme",
+  "sideEffects": false,
+  "keywords": [
+    "wikialisa", "axvn", "swift", "oauth2", "gpi", "pki",
+    "java-bridge", "evm", "tron", "escrow", "audit",
+    "fintech", "banking", "institutional", "payments", "typescript"
+  ],
+  "engines": { "node": ">=22" },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": { "types": "./dist/index.d.mts", "default": "./dist/index.mjs" },
+      "require": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+    },
+    "./security": {
+      "import": { "types": "./dist/security/index.d.mts", "default": "./dist/security/index.mjs" },
+      "require": { "types": "./dist/security/index.d.ts", "default": "./dist/security/index.js" }
+    },
+    "./clients": {
+      "import": { "types": "./dist/clients/index.d.mts", "default": "./dist/clients/index.mjs" },
+      "require": { "types": "./dist/clients/index.d.ts", "default": "./dist/clients/index.js" }
+    },
+    "./bridge": {
+      "import": { "types": "./dist/bridge/index.d.mts", "default": "./dist/bridge/index.mjs" },
+      "require": { "types": "./dist/bridge/index.d.ts", "default": "./dist/bridge/index.js" }
+    },
+    "./blockchain": {
+      "import": { "types": "./dist/blockchain/index.d.mts", "default": "./dist/blockchain/index.mjs" },
+      "require": { "types": "./dist/blockchain/index.d.ts", "default": "./dist/blockchain/index.js" }
+    },
+    "./audit": {
+      "import": { "types": "./dist/audit/index.d.mts", "default": "./dist/audit/index.mjs" },
+      "require": { "types": "./dist/audit/index.d.ts", "default": "./dist/audit/index.js" }
+    }
+  },
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "build": "tsup --config tsup.config.ts",
+    "dev": "tsup --config tsup.config.ts --watch",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "js-yaml": "^4.1.0",
+    "viem": "^2.21.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wikialisa/wikialisa.git",
+    "directory": "packages/swift-gateway"
+  },
+  "bugs": { "url": "https://github.com/wikialisa/wikialisa/issues" }
+}

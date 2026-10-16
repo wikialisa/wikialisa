@@ -1,0 +1,40 @@
+# ─── Dockerfile.explorer-vnkrscan ────────────────────────────────────────────
+# Next.js standalone — apps/explorer-vnkrscan — Port 3003
+ARG NODE_VERSION=22
+ARG PNPM_VERSION=9.15.9
+
+FROM node:${NODE_VERSION}-alpine AS base
+RUN apk add --no-cache libc6-compat && \
+    corepack enable && \
+    corepack prepare pnpm@${PNPM_VERSION} --activate
+
+FROM base AS builder
+WORKDIR /app
+
+COPY pnpm-workspace.yaml turbo.json package.json pnpm-lock.yaml ./
+COPY packages/ ./packages/
+COPY apps/explorer-vnkrscan/ ./apps/explorer-vnkrscan/
+
+RUN pnpm install --frozen-lockfile
+ARG NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm turbo build --filter=explorer-vnkrscan...
+
+FROM node:${NODE_VERSION}-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3003
+ENV HOSTNAME=0.0.0.0
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser  --system --uid 1001 nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/apps/explorer-vnkrscan/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/explorer-vnkrscan/.next/static      ./apps/explorer-vnkrscan/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/explorer-vnkrscan/public            ./apps/explorer-vnkrscan/public
+
+USER nextjs
+EXPOSE 3003
+CMD ["node", "apps/explorer-vnkrscan/server.js"]

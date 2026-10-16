@@ -1,0 +1,49 @@
+# ─── Dockerfile.app-web ─────────────────────────────────────────────────────
+# Next.js standalone — apps/app-web — Port 3010
+ARG NODE_VERSION=22
+ARG PNPM_VERSION=9.15.9
+
+# ── Stage: base ──────────────────────────────────────────────────────────────
+FROM node:${NODE_VERSION}-alpine AS base
+RUN apk add --no-cache libc6-compat && \
+    corepack enable && \
+    corepack prepare pnpm@${PNPM_VERSION} --activate
+
+# ── Stage: builder ───────────────────────────────────────────────────────────
+FROM base AS builder
+WORKDIR /app
+
+# Monorepo root manifests
+COPY pnpm-workspace.yaml turbo.json package.json pnpm-lock.yaml ./
+
+# Internal packages
+COPY packages/ ./packages/
+
+# App source
+COPY apps/app-web/ ./apps/app-web/
+
+# Install + build
+RUN pnpm install --frozen-lockfile
+ARG NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm turbo build --filter=app-web...
+
+# ── Stage: runner ────────────────────────────────────────────────────────────
+FROM node:${NODE_VERSION}-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3010
+ENV HOSTNAME=0.0.0.0
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser  --system --uid 1001 nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/apps/app-web/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/app-web/.next/static      ./apps/app-web/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/app-web/public            ./apps/app-web/public
+
+USER nextjs
+EXPOSE 3010
+CMD ["node", "apps/app-web/server.js"]

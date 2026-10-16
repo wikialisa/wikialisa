@@ -1,0 +1,57 @@
+name: Changeset Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: changeset-release
+  cancel-in-progress: false  # không cancel — tránh mất publish
+
+env:
+  NODE_VERSION: "22.14.0"
+  PNPM_VERSION: "9.15.9"
+
+jobs:
+  release:
+    name: Version or Publish packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # push tags + commits
+      pull-requests: write  # tạo/update "Version Packages" PR
+      packages: write       # publish to GitHub Packages (nếu cần)
+      id-token: write       # npm provenance
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Lấy đủ history để Changesets tính diff đúng
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # Changesets action:
+      #   - Nếu có file .changeset/*.md  → mở / update PR "Version Packages"
+      #   - Nếu "Version Packages" PR vừa được merge → build + test + publish
+      - name: Create Release PR or Publish
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset:version
+          publish: pnpm changeset:publish
+          commit: "chore: version packages"
+          title: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

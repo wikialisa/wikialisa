@@ -1,0 +1,396 @@
+
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>@wikialisa — Packages Overview</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 32px 16px 48px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #57606a; font-size: 13px; margin-bottom: 28px; }
+
+  /* Summary bar */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .stat {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .stat-num { font-size: 22px; font-weight: 700; color: #1f2328; }
+  .stat-label { font-size: 12px; color: #57606a; margin-top: 2px; }
+
+  /* Sections */
+  h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #57606a; margin: 28px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
+
+  /* Package cards */
+  .pkg {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .pkg-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+  .pkg-name { font-weight: 700; font-size: 14px; }
+  .pkg-name code { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; background: #f7f8fa; padding: 1px 5px; border-radius: 4px; }
+  .pkg-ver { font-size: 12px; color: #57606a; white-space: nowrap; }
+  .pkg-desc { font-size: 13px; color: #57606a; margin-bottom: 8px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+  .tag {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 12px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .tag-access-public   { background: #e6f4ea; border-color: #b3d9bb; color: #276f36; }
+  .tag-access-private  { background: #fff4e5; border-color: #f5c97a; color: #855a00; }
+  .tag-license-bsl     { background: #eef2ff; border-color: #c7d2fe; color: #3730a3; }
+  .tag-license-mit     { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+  .tag-license-none    { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+  .tag-private         { background: #fef9ee; border-color: #fde68a; color: #92400e; }
+
+  .dep-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .dep-label { font-size: 11px; color: #57606a; font-weight: 600; min-width: 70px; }
+  .dep-chip {
+    font-size: 11px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #1f2328;
+  }
+  .dep-chip.workspace { border-color: #c7d2fe; background: #eef2ff; color: #3730a3; }
+
+  /* Issues */
+  .issue { display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px; border-radius: 5px; margin-bottom: 7px; font-size: 13px; }
+  .issue-warn  { background: #fffbeb; border-left: 3px solid #f59e0b; }
+  .issue-info  { background: #eff6ff; border-left: 3px solid #3b82d4; }
+  .issue-ok    { background: #f0fdf4; border-left: 3px solid #22c55e; }
+  .issue-label { font-weight: 700; white-space: nowrap; }
+
+  /* Dep graph */
+  .graph-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+  .graph-source { font-family: monospace; font-size: 12px; background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 4px; padding: 2px 7px; min-width: 200px; }
+  .graph-arrow { color: #57606a; }
+  .graph-targets { display: flex; flex-wrap: wrap; gap: 4px; }
+  .graph-target { font-family: monospace; font-size: 11px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; padding: 1px 6px; color: #3730a3; }
+
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #57606a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>@wikialisa — Tổng quan Packages</h1>
+  <p class="subtitle">Monorepo AXQ Tech Holding JSC  ·  12 packages  ·  Kiểm tra tại: packages/*</p>
+
+  
+  <div class="summary">
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">Tổng packages</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Public (npmjs)</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Restricted (GPR)</div></div>
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">Private (workspace)</div></div>
+  </div>
+
+  
+  <h2>⚠ Phát hiện vấn đề</h2>
+
+  <div class="issue issue-warn">
+    <span class="issue-label">TRÙNG LẶP</span>
+    <span><code>@wikialisa/swift-adapter</code> và <code>@wikialisa/swift-sdk-internal</code> cùng implement MT103/MT202/pacs.008/LAU. <code>sdk-internal</code> phụ thuộc <code>swift-adapter</code> — cần review overlap và consolidate.</span>
+  </div>
+  <div class="issue issue-warn">
+    <span class="issue-label">TRÙNG LẶP</span>
+    <span><code>@wikialisa/sdk-swift</code> cũng có <code>fast-xml-parser</code> + <code>zod</code> cho SWIFT — có thể là package trùng với <code>swift-adapter</code> / <code>swift-sdk-internal</code>. Cần xác định vai trò rõ ràng.</span>
+  </div>
+  <div class="issue issue-warn">
+    <span class="issue-label">THIẾU</span>
+    <span><code>@workspace/web3-config</code> dùng name scope khác (<code>@workspace</code> thay vì <code>@wikialisa</code>), version 1.0.0 (tụt sau 1.0.1), không có <code>license</code>, không có <code>author</code>.</span>
+  </div>
+  <div class="issue issue-warn">
+    <span class="issue-label">THIẾU</span>
+    <span><code>@wikialisa/swift-adapter</code> dùng <code>ajv</code> + <code>js-yaml</code> nhưng không dùng <code>zod</code> — trong khi <code>swift-sdk-internal</code> (cùng miền) đã có zod. Nên thống nhất validation library.</span>
+  </div>
+  <div class="issue issue-info">
+    <span class="issue-label">LƯU Ý</span>
+    <span><code>@wikialisa/swift-adapter</code> dùng <code>js-yaml ^5.3.0</code> — phiên bản này không tồn tại (js-yaml nhảy từ 4.x lên 4.x, không có 5.x). Cần kiểm tra lại.</span>
+  </div>
+  <div class="issue issue-info">
+    <span class="issue-label">LƯU Ý</span>
+    <span><code>@wikialisa/contracts</code> không có <code>engines</code> field nhất quán — chỉ <code>db</code>, <code>sdk-internal</code> có <code>"node": "&gt;=22"</code>. Nên thêm đồng bộ cho tất cả backend packages.</span>
+  </div>
+  <div class="issue issue-ok">
+    <span class="issue-label">OK</span>
+    <span>Tất cả packages đều dùng <code>tsup ^8.3</code> + <code>typescript ^5.6</code> nhất quán. Exports map (CJS + ESM + types) đúng chuẩn.</span>
+  </div>
+
+  
+  <h2>📦 Dependency nội bộ (workspace:*)</h2>
+  <div class="graph-row"><span class="graph-source">@wikialisa/contracts</span><span class="graph-arrow">→</span><div class="graph-targets"><span class="graph-target">@wikialisa/types</span><span class="graph-target">@wikialisa/config</span></div></div>
+  <div class="graph-row"><span class="graph-source">@wikialisa/core-sdk</span><span class="graph-arrow">→</span><div class="graph-targets"><span class="graph-target">@wikialisa/config</span><span class="graph-target">@wikialisa/types</span></div></div>
+  <div class="graph-row"><span class="graph-source">@wikialisa/db</span><span class="graph-arrow">→</span><div class="graph-targets"><span class="graph-target">@wikialisa/types</span></div></div>
+  <div class="graph-row"><span class="graph-source">@wikialisa/merchant-sdk</span><span class="graph-arrow">→</span><div class="graph-targets"><span class="graph-target">@wikialisa/config</span><span class="graph-target">@wikialisa/types</span></div></div>
+  <div class="graph-row"><span class="graph-source">@wikialisa/sdk-internal</span><span class="graph-arrow">→</span><div class="graph-targets"><span class="graph-target">@wikialisa/config</span><span class="graph-target">@wikialisa/types</span><span class="graph-target">@wikialisa/swift-adapter</span></div></div>
+  <div class="graph-row"><span class="graph-source">@wikialisa/swift-adapter</span><span class="graph-arrow">→</span><div class="graph-targets"><span class="graph-target">@wikialisa/config</span><span class="graph-target">@wikialisa/types</span></div></div>
+  <div class="graph-row"><span class="graph-source">@wikialisa/swift-sdk-internal</span><span class="graph-arrow">→</span><div class="graph-targets"><span class="graph-target">@wikialisa/config</span><span class="graph-target">@wikialisa/types</span></div></div>
+
+  
+  <h2>📋 Chi tiết từng package</h2>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/config</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">Environment constants, Program IDs, Seed PDAs, RPC endpoints &amp; feature flags</div>
+    <div class="tags">
+      <span class="tag tag-access-public">public · npmjs</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row"><span class="dep-label">deps:</span><em style="color:#57606a;font-size:12px">không có runtime deps</em></div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/types</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">Shared TypeScript types — Order, KYC, Fiat, Wallet, SWIFT, Compliance</div>
+    <div class="tags">
+      <span class="tag tag-access-public">public · npmjs</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row"><span class="dep-label">deps:</span><em style="color:#57606a;font-size:12px">không có runtime deps</em></div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/core-sdk</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">Solana/EVM Web3 wrapper, Anchor IDL integrator và wallet utilities</div>
+    <div class="tags">
+      <span class="tag tag-access-public">public · npmjs</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip workspace">@wikialisa/config</span>
+      <span class="dep-chip workspace">@wikialisa/types</span>
+      <span class="dep-chip">@coral-xyz/anchor ^0.30.1</span>
+      <span class="dep-chip">@solana/web3.js ^1.95.0</span>
+      <span class="dep-chip">viem ^2.21.0</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/contracts</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">Bophades Modular Smart Contracts — AXQ Reserve, Governance, Treasury, VASP (EVM + Solana)</div>
+    <div class="tags">
+      <span class="tag tag-access-public">public · npmjs</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip workspace">@wikialisa/types</span>
+      <span class="dep-chip workspace">@wikialisa/config</span>
+      <span class="dep-chip">@openzeppelin/contracts ^5.1.0</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">devDeps:</span>
+      <span class="dep-chip">hardhat ^2.22.0</span>
+      <span class="dep-chip">@nomicfoundation/hardhat-toolbox ^5.0.0</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/db</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">Shared PostgreSQL connection pool và typed query helpers cho backend services</div>
+    <div class="tags">
+      <span class="tag tag-access-private">restricted · GPR</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip workspace">@wikialisa/types</span>
+      <span class="dep-chip">pg ^8.13.0</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/merchant-sdk</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">TypeScript/JS client cho merchant partners tích hợp AXQ payment gateway API</div>
+    <div class="tags">
+      <span class="tag tag-access-public">public · npmjs</span>
+      <span class="tag tag-license-mit">MIT</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip workspace">@wikialisa/config</span>
+      <span class="dep-chip workspace">@wikialisa/types</span>
+      <span class="dep-chip">axios ^1.7.0</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/swift-adapter</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">MT103/MT202 message builder, ISO 20022 pacs.008 parser và LAU signing</div>
+    <div class="tags">
+      <span class="tag tag-access-private">restricted · GPR</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip workspace">@wikialisa/config</span>
+      <span class="dep-chip workspace">@wikialisa/types</span>
+      <span class="dep-chip">ajv ^8.20.0</span>
+      <span class="dep-chip">fast-xml-parser ^4.4.1</span>
+      <span class="dep-chip">ioredis ^5.4.1</span>
+      <span class="dep-chip" style="border-color:#fca5a5;background:#fef2f2;color:#991b1b">js-yaml ^5.3.0 ⚠</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/swift-sdk-internal</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">SWIFT vendor SDK internal mirror — MT103/202/940, pacs.008/009, camt.053, LAU, RMA, Event Bus client</div>
+    <div class="tags">
+      <span class="tag tag-access-private">restricted · GPR</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip workspace">@wikialisa/config</span>
+      <span class="dep-chip workspace">@wikialisa/types</span>
+      <span class="dep-chip">fast-xml-parser ^4.4.1</span>
+      <span class="dep-chip">ioredis ^5.4.1</span>
+      <span class="dep-chip">zod ^3.23.0</span>
+      <span class="dep-chip">uuid ^11.0.0</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/sdk-swift</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">SWIFT Alliance Gateway SDK — vai trò chưa rõ, có thể trùng với swift-adapter</div>
+    <div class="tags">
+      <span class="tag tag-access-private">restricted · GPR</span>
+      <span class="tag tag-license-none">⚠ thiếu license</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip">axios ^1.7.2</span>
+      <span class="dep-chip">ethers ^6.13.1</span>
+      <span class="dep-chip">fast-xml-parser ^4.4.0</span>
+      <span class="dep-chip">zod ^3.23.8</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/sdk-internal</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">Internal SDK tổng hợp — SWIFT types, builders, security, event bus, config</div>
+    <div class="tags">
+      <span class="tag tag-access-private">restricted · GPR</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip workspace">@wikialisa/config</span>
+      <span class="dep-chip workspace">@wikialisa/types</span>
+      <span class="dep-chip workspace">@wikialisa/swift-adapter</span>
+    </div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@wikialisa/ui-kit</code></div>
+      <div class="pkg-ver">v1.0.1</div>
+    </div>
+    <div class="pkg-desc">Design System — React components, design tokens, icons và brand assets</div>
+    <div class="tags">
+      <span class="tag tag-access-public">public · npmjs</span>
+      <span class="tag tag-license-bsl">BSL-1.1</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">peerDeps:</span>
+      <span class="dep-chip">react &gt;=18</span>
+      <span class="dep-chip">react-dom &gt;=18</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">devDeps:</span>
+      <span class="dep-chip">vite ^5.3.1</span>
+      <span class="dep-chip">@vitejs/plugin-react ^4.3.1</span>
+      <span class="dep-chip">vite-plugin-dts ^3.9.1</span>
+    </div>
+    <div style="margin-top:6px;font-size:12px;color:#57606a">⚠ Dùng Vite build thay vì tsup — khác pattern với các packages còn lại.</div>
+  </div>
+
+  
+  <div class="pkg">
+    <div class="pkg-header">
+      <div class="pkg-name"><code>@workspace/web3-config</code></div>
+      <div class="pkg-ver">v1.0.0 ⚠</div>
+    </div>
+    <div class="pkg-desc">Internal Web3 chain config — AXQ Network chains, contract addresses, ABIs và Viem clients</div>
+    <div class="tags">
+      <span class="tag tag-private">private</span>
+      <span class="tag tag-license-none">⚠ thiếu license</span>
+      <span class="tag tag-license-none">⚠ scope @workspace ≠ @wikialisa</span>
+    </div>
+    <div class="dep-row">
+      <span class="dep-label">deps:</span>
+      <span class="dep-chip">viem ^2.21.19</span>
+    </div>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>

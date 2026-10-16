@@ -1,0 +1,67 @@
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3010
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Ready in 16.1s
+ ○ Compiling / ...
+ ✓ Compiled / in 24.6s (460 modules)
+ GET / 200 in 25468ms
+ GET / 200 in 17554ms
+ ○ Compiling /home ...
+ GET /manifest.json 500 in 16633ms
+ GET /home 500 in 167ms
+ GET /home 500 in 149ms
+ GET /home 500 in 89ms
+[?25h
+2026-10-15 10:46:25 +00:00:   ▲ Next.js 14.2.35
+2026-10-15 10:46:25 +00:00:   - Local:        http://localhost:3010
+2026-10-15 10:46:25 +00:00: 
+2026-10-15 10:46:25 +00:00:  ✓ Starting...
+2026-10-15 10:46:29 +00:00:  ✓ Ready in 4.2s
+2026-10-15 10:47:11 +00:00:  ○ Compiling / ...
+2026-10-15 10:47:15 +00:00:  ✓ Compiled / in 4.3s (460 modules)
+2026-10-15 10:47:15 +00:00:  HEAD / 200 in 4577ms
+2026-10-15 10:47:16 +00:00:  ○ Compiling /home ...
+2026-10-15 10:47:24 +00:00:  GET /home 500 in 8923ms
+2026-10-15 10:47:43 +00:00: [?25h
+2026-10-15 10:47:43 +00:00: 
+2026-10-15 10:48:15 +00:00:   ▲ Next.js 14.2.35
+2026-10-15 10:48:15 +00:00:   - Local:        http://localhost:3010
+2026-10-15 10:48:15 +00:00: 
+2026-10-15 10:48:15 +00:00:  ✓ Starting...
+2026-10-15 10:48:19 +00:00:  ✓ Ready in 4.8s
+2026-10-15 10:48:25 +00:00:  ○ Compiling /home ...
+2026-10-15 10:48:32 +00:00:  GET /home 500 in 8152ms
+2026-10-15 10:50:12 +00:00:  GET /_next/static/webpack/a8d9c566a6744397.webpack.hot-update.json 404 in 977ms
+2026-10-15 10:50:12 +00:00:  GET /_next/static/webpack/a8d9c566a6744397.webpack.hot-update.json 404 in 45ms
+2026-10-15 10:50:13 +00:00:  GET /home 200 in 784ms
+2026-10-15 10:50:13 +00:00:  GET /home 200 in 843ms
+2026-10-15 10:50:17 +00:00:  GET /manifest.json 404 in 2197ms
+2026-10-15 10:50:17 +00:00:  GET /manifest.json 404 in 23ms
+2026-10-15 10:50:17 +00:00:  GET /manifest.json 404 in 20ms
+2026-10-15 10:50:19 +00:00:  ✓ Compiled /enter-pin in 293ms (823 modules)
+2026-10-15 11:19:49 +00:00:  ○ Compiling / ...
+2026-10-15 11:19:49 +00:00:  ✓ Compiled / in 690ms (819 modules)
+2026-10-15 11:19:50 +00:00:  HEAD / 200 in 798ms
+2026-10-15 11:20:18 +00:00:  GET /enter-pin?returnUrl=%2Fhome 200 in 88ms
+2026-10-15 11:20:32 +00:00:  GET /enter-pin?returnUrl=%2Fhome 200 in 42ms
+2026-10-15 11:33:14 +00:00:  GET / 200 in 35ms
+2026-10-15 11:33:15 +00:00:  ✓ Compiled /home in 180ms (342 modules)
+2026-10-15 15:23:51 +00:00:  GET /enter-pin?returnUrl=%2Fhome 200 in 483ms
+2026-10-15 18:37:52 +00:00:  GET /enter-pin?returnUrl=%2Fhome 200 in 62ms
+2026-10-15 18:37:58 +00:00:  GET / 200 in 90ms
+2026-10-15 18:38:51 +00:00:  ○ Compiling /reset-pin ...
+2026-10-15 18:38:52 +00:00:  ✓ Compiled /reset-pin in 2.1s (832 modules)
+2026-10-15 18:39:27 +00:00:  ○ Compiling /onboarding ...
+2026-10-15 18:39:28 +00:00:  ✓ Compiled /onboarding in 1606ms (830 modules)
+2026-10-15 18:39:28 +00:00:  GET /onboarding 200 in 1854ms
+2026-10-15 18:39:36 +00:00:  ○ Compiling /register ...
+2026-10-15 18:39:36 +00:00:  ✓ Compiled /register in 724ms (836 modules)
+2026-10-15 18:42:12 +00:00:  ✓ Compiled /otp in 480ms (835 modules)
+2026-10-15 20:31:40 +00:00: [?25h
+2026-10-15 20:31:40 +00:00: 

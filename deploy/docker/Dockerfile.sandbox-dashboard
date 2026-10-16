@@ -1,0 +1,40 @@
+# ─── Dockerfile.sandbox-dashboard ────────────────────────────────────────────
+# Next.js standalone — apps/sandbox-dashboard — Port 3012
+ARG NODE_VERSION=22
+ARG PNPM_VERSION=9.15.9
+
+FROM node:${NODE_VERSION}-alpine AS base
+RUN apk add --no-cache libc6-compat && \
+    corepack enable && \
+    corepack prepare pnpm@${PNPM_VERSION} --activate
+
+FROM base AS builder
+WORKDIR /app
+
+COPY pnpm-workspace.yaml turbo.json package.json pnpm-lock.yaml ./
+COPY packages/ ./packages/
+COPY apps/sandbox-dashboard/ ./apps/sandbox-dashboard/
+
+RUN pnpm install --frozen-lockfile
+ARG NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm turbo build --filter=sandbox-dashboard...
+
+FROM node:${NODE_VERSION}-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3012
+ENV HOSTNAME=0.0.0.0
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser  --system --uid 1001 nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/apps/sandbox-dashboard/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/sandbox-dashboard/.next/static      ./apps/sandbox-dashboard/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/sandbox-dashboard/public            ./apps/sandbox-dashboard/public
+
+USER nextjs
+EXPOSE 3012
+CMD ["node", "apps/sandbox-dashboard/server.js"]

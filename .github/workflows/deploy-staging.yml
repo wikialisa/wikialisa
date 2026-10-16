@@ -1,0 +1,112 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22.14.0"
+  PNPM_VERSION: "9.15.9"
+
+jobs:
+  # ── 1. CI gate (lint + typecheck + test phải pass trước) ─────────────────────
+  ci-gate:
+    name: CI gate
+    uses: ./.github/workflows/ci.yml
+
+  # ── 2. Build tất cả packages và apps ─────────────────────────────────────────
+  build:
+    name: Build monorepo
+    needs: ci-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-build-${{ github.sha }}
+          restore-keys: turbo-build-
+
+      - name: Build
+        run: pnpm turbo run build --cache-dir=.turbo
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_API_URL: ${{ vars.STAGING_API_URL }}
+          NEXT_PUBLIC_RPC_URL: ${{ vars.STAGING_RPC_URL }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+          path: |
+            apps/*/.next/
+            services/*/dist/
+            packages/*/dist/
+          retention-days: 1
+
+  # ── 3. Deploy lên staging server qua SSH ─────────────────────────────────────
+  deploy:
+    name: Deploy to staging
+    needs: build
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+          port: ${{ secrets.STAGING_PORT || 22 }}
+          script: |
+            set -euo pipefail
+            cd /var/www/wikialisa
+
+            echo "📥 Pull latest code..."
+            git pull origin main
+
+            echo "📦 Install dependencies..."
+            pnpm install --frozen-lockfile
+
+            echo "🏗  Build monorepo..."
+            pnpm turbo run build --cache-dir=.turbo
+
+            echo "🔄 Reload PM2 apps..."
+            pm2 reload ecosystem.config.cjs --update-env
+
+            echo "💾 Save PM2 state..."
+            pm2 save
+
+            echo "✅ Staging deploy complete."
+            pm2 ls
+
+      - name: Notify deploy success
+        if: success()
+        run: |
+          echo "✅ Deployed commit ${{ github.sha }} to staging"
+          # Optional: gửi Telegram/Discord webhook
+          # curl -s -X POST "${{ secrets.TELEGRAM_WEBHOOK_URL }}" \
+          #   -d "text=✅ Staging deployed: ${{ github.sha }}"

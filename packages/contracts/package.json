@@ -1,0 +1,66 @@
+{
+  "name": "@wikialisa/contracts",
+  "version": "1.0.1",
+  "description": "WIKIALISA Bophades Modular Smart Contracts — AXQ Reserve Currency, Governance, Treasury, VASP & Compliance (EVM + Solana)",
+  "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
+  "license": "BSL-1.1",
+  "homepage": "https://github.com/wikialisa/wikialisa#readme",
+  "sideEffects": false,
+  "keywords": ["wikialisa", "axvn", "axq", "solidity", "smart-contracts", "evm", "governance", "treasury", "dao", "defi"],
+  "engines": { "node": ">=22" },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./addresses": "./exports/addresses.json",
+    "./abi/*": "./exports/abi/*.json"
+  },
+  "files": [
+    "dist",
+    "exports",
+    "contracts"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:forge": "forge test -vvv",
+    "deploy:local": "hardhat run scripts/deploy-kernel.ts --network localhost",
+    "deploy:testnet": "hardhat run scripts/deploy-kernel.ts --network testnet",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist artifacts cache typechain-types"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0",
+    "@wikialisa/types": "workspace:*",
+    "@wikialisa/config": "workspace:*"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wikialisa/wikialisa.git",
+    "directory": "packages/contracts"
+  },
+  "bugs": { "url": "https://github.com/wikialisa/wikialisa/issues" }
+}

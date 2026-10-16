@@ -1,0 +1,53 @@
+{
+  "name": "@wikialisa/web3-config",
+  "version": "1.0.1",
+  "description": "Internal Web3 chain config — AXQ Network chains, contract addresses, ABIs and Viem clients",
+  "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
+  "license": "BSL-1.1",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@wikialisa/config": "workspace:*",
+    "viem": "^2.21.19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wikialisa/wikialisa.git",
+    "directory": "packages/web3-config"
+  },
+  "bugs": {
+    "url": "https://github.com/wikialisa/wikialisa/issues"
+  }
+}

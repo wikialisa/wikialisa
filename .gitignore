@@ -1,0 +1,12 @@
+node_modules
+.env
+*.env.local
+.log/
+*.zip
+dump.rdb
+.turbo/
+dist/
+build/
+.next/
+target/
+docs/vnkr-labs.zip

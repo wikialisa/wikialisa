@@ -1,0 +1,36 @@
+# ─── Dockerfile.digital-twin-engine ──────────────────────────────────────────
+# Plain Node.js — apps/digital-twin-engine — Port 3007
+ARG NODE_VERSION=22
+ARG PNPM_VERSION=9.15.9
+
+FROM node:${NODE_VERSION}-alpine AS base
+RUN apk add --no-cache libc6-compat && \
+    corepack enable && \
+    corepack prepare pnpm@${PNPM_VERSION} --activate
+
+FROM base AS builder
+WORKDIR /app
+
+COPY pnpm-workspace.yaml turbo.json package.json pnpm-lock.yaml ./
+COPY packages/ ./packages/
+COPY apps/digital-twin-engine/ ./apps/digital-twin-engine/
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm turbo build --filter=digital-twin-engine...
+
+FROM node:${NODE_VERSION}-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3007
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser  --system --uid 1001 nodeapp
+
+COPY --from=builder --chown=nodeapp:nodejs /app/apps/digital-twin-engine/dist          ./apps/digital-twin-engine/dist
+COPY --from=builder --chown=nodeapp:nodejs /app/apps/digital-twin-engine/node_modules  ./apps/digital-twin-engine/node_modules
+COPY --from=builder --chown=nodeapp:nodejs /app/apps/digital-twin-engine/package.json  ./apps/digital-twin-engine/package.json
+
+USER nodeapp
+EXPOSE 3007
+CMD ["node", "apps/digital-twin-engine/dist/index.js"]

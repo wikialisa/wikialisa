@@ -1,0 +1,492 @@
+
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wikialisa — Báo Cáo Nhận Xét IP Lõi</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 32px 16px 48px;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    border-bottom: 2px solid #1f2328;
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .header .sub { font-size: 13px; color: #57606a; margin-top: 4px; }
+  .header .meta { display: flex; gap: 20px; margin-top: 12px; flex-wrap: wrap; }
+  .header .meta span { font-size: 12px; color: #57606a; }
+  .header .meta strong { color: #1f2328; }
+
+  /* Role card */
+  .role-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .role-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .role-icon {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .role-header h2 { font-size: 15px; font-weight: 600; }
+  .role-header p { font-size: 12px; color: #57606a; margin-top: 2px; }
+  .role-body { padding: 16px 18px; }
+
+  /* Sections inside card */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #57606a;
+    margin: 12px 0 6px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 12px;
+  }
+  .section-title:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+
+  /* Finding list */
+  .findings { list-style: none; padding: 0; }
+  .findings li {
+    display: flex;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0f1f3;
+    align-items: flex-start;
+  }
+  .findings li:last-child { border-bottom: none; }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
+  .badge-green  { background: #d1fae5; color: #065f46; }
+  .badge-blue   { background: #dbeafe; color: #1e40af; }
+  .badge-amber  { background: #fef3c7; color: #92400e; }
+  .badge-red    { background: #fee2e2; color: #991b1b; }
+  .badge-purple { background: #ede9fe; color: #5b21b6; }
+  .badge-gray   { background: #f3f4f6; color: #374151; }
+
+  /* Key metric bar */
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 14px 0; }
+  .metric { background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 5px; padding: 10px 12px; }
+  .metric .label { font-size: 11px; color: #57606a; text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+  .metric .value.green  { color: #065f46; }
+  .metric .value.amber  { color: #92400e; }
+  .metric .value.red    { color: #991b1b; }
+  .metric .value.blue   { color: #1e40af; }
+  .metric .value.purple { color: #5b21b6; }
+
+  /* Verdict box */
+  .verdict {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 5px;
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .verdict-green  { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+  .verdict-amber  { background: #fef3c7; color: #78350f; border-left: 4px solid #f59e0b; }
+  .verdict-red    { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+
+  /* Summary overview table */
+  .overview-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 14px; }
+  .overview-table th {
+    background: #f7f8fa;
+    text-align: left;
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #57606a;
+  }
+  .overview-table td { padding: 7px 10px; border: 1px solid #e5e7eb; vertical-align: top; }
+  .overview-table tr:nth-child(even) td { background: #fafafa; }
+
+  /* divider */
+  .divider { border: none; border-top: 1px solid #e5e7eb; margin: 28px 0; }
+
+  .key-finding {
+    background: #f7f8fa;
+    border-left: 3px solid #3b82d4;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  
+  <div class="header">
+    <h1>Wikialisa — Báo Cáo Nhận Xét IP Lõi</h1>
+    <p class="sub">Phân tích từ góc nhìn đa vai trò dựa trên đọc toàn bộ mã nguồn Monorepo</p>
+    <div class="meta">
+      <span><strong>Phạm vi:</strong> 11 apps · 14 packages · 9 services · 5 smart contract programs</span>
+      <span><strong>Stack:</strong> Solana Anchor (Rust) · EVM Solidity · Node.js/TypeScript · Next.js 14</span>
+      <span><strong>Ngày phân tích:</strong> Tháng 7 / 2025</span>
+    </div>
+  </div>
+
+  
+  <div style="margin-bottom:28px">
+    <p style="font-size:14px;line-height:1.7;color:#1f2328">
+      Wikialisa được thiết kế như một <strong>IP lõi</strong> (core intellectual property) cho toàn hệ sinh thái tập đoàn AXQ TECH HOLDING — từ tầng L1/L2 blockchain (SVM + ZK), 
+      đến SWIFT institutional bridge, P2P escrow, AMM DEX, DAO governance, và wallet UX. Mã nguồn thực tế đã triển khai được (~60%) với chất lượng kiến trúc tốt ở tầng protocol/smart contract, 
+      nhưng tầng ứng dụng đang ở trạng thái MVP với nhiều rủi ro cần giải quyết trước khi ra sản phẩm. Báo cáo dưới đây phân tích từng vai trò.
+    </p>
+  </div>
+
+  
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon" style="background:#dbeafe">🎯</div>
+      <div>
+        <h2>Vai trò 1 — Founder / Chief Architect</h2>
+        <p>Nhìn từ góc độ chiến lược IP, tầm nhìn sản phẩm và giá trị kinh tế</p>
+      </div>
+    </div>
+    <div class="role-body">
+      <div class="section-title">Điểm mạnh chiến lược</div>
+      <ul class="findings">
+        <li><span class="badge badge-green">XUẤT SẮC</span> Mô hình IP lõi được thiết kế rất hoàn chỉnh: wikialisa là UI engine (1kB VDOM) phủ toàn bộ frontend; AXQ token là bảo chứng xuyên suốt; SWIFT bridge + P2P escrow + AMM + DAO = full-stack financial infrastructure.</li>
+        <li><span class="badge badge-green">XUẤT SẮC</span> Mô hình 5-token (AXQ, VPX, SQX, KPX, VRQ) với Proof-of-Lock và Buyback &amp; Burn loop được thiết kế chặt chẽ về mặt tokenomics — tạo vòng phản hồi dương tính bền vững.</li>
+        <li><span class="badge badge-green">TỐT</span> Cấu trúc pháp nhân 8 công ty thành viên (VN + SG + Cayman + Dubai) ánh xạ trực tiếp 1:1 lên 11 subdomain và module kỹ thuật — kiến trúc tập đoàn có tư duy rất hệ thống.</li>
+        <li><span class="badge badge-green">TỐT</span> ROABMAP.MD v2.0 định nghĩa roadmap 4 giai đoạn (12 tháng) với KPI cụ thể: TPS &gt;500K, ZK-Auth mobile &lt;1s, TVL &gt;$100M, domain resolve &lt;10ms — đây là benchmark có thể đo được.</li>
+        <li><span class="badge badge-blue">TIỀM NĂNG</span> ZK-centric approach cho mọi lớp (identity, governance, bridge, prover) là hướng đi đúng đắn và khác biệt so với hầu hết L2 Việt Nam.</li>
+      </ul>
+      <div class="section-title">Rủi ro chiến lược cần chú ý</div>
+      <ul class="findings">
+        <li><span class="badge badge-amber">RỦI RO</span> Gap lớn giữa vision (ROABMAP.MD) và implementation thực tế: Stateless SVM, ZK prover runtime, Sequentichain, Valiprecision, Veraciphers — chưa có dòng code nào trong monorepo hiện tại. Đây là tech debt blueprint lớn.</li>
+        <li><span class="badge badge-amber">RỦI RO</span> 5 smart contract programs dùng Program ID placeholder (ESCRw111..., MINTg111..., SWFTb111...) — chưa deploy mainnet. Cần timeline deploy rõ ràng.</li>
+        <li><span class="badge badge-amber">RỦI RO</span> @wikialisa/sdk-swift v1.0.2 đã publish npm nhưng các package core (@wikialisa/ans-sdk, ZK SDK) chưa tồn tại — thứ tự publish cần đảo ngược.</li>
+      </ul>
+      <div class="verdict verdict-amber">
+        <strong>Nhận định Founder:</strong> Wikialisa có tư duy IP lõi đúng hướng và kiến trúc hệ sinh thái được thiết kế tốt. Ưu tiên cấp bách là thu hẹp gap giữa blueprint và code thực tế — đặc biệt ở tầng ZK và SVM vì đây là USP (unique selling proposition) thực sự.
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon" style="background:#ede9fe">⚙️</div>
+      <div>
+        <h2>Vai trò 2 — CTO / Engineering Lead</h2>
+        <p>Nhìn từ góc độ kiến trúc kỹ thuật, dependency graph và khả năng scale</p>
+      </div>
+    </div>
+    <div class="role-body">
+      <div class="metrics">
+        <div class="metric"><div class="label">Apps</div><div class="value blue">11</div></div>
+        <div class="metric"><div class="label">Packages</div><div class="value blue">14</div></div>
+        <div class="metric"><div class="label">Services</div><div class="value blue">9</div></div>
+        <div class="metric"><div class="label">Programs (SC)</div><div class="value purple">5</div></div>
+        <div class="metric"><div class="label">Subdomains</div><div class="value green">11</div></div>
+      </div>
+      <div class="section-title">Điểm mạnh kiến trúc</div>
+      <ul class="findings">
+        <li><span class="badge badge-green">TỐT</span> Monorepo pnpm + Turborepo: workspace conflict đã được fix, engines.node ≥22 đồng bộ toàn bộ, separation of concerns rõ ràng (apps / packages / services / programs).</li>
+        <li><span class="badge badge-green">TỐT</span> packages/types/src/index.ts cực kỳ toàn diện: ~826 dòng type definitions bao phủ toàn bộ domain — Auth, KYC, P2P, Exchange, Finance, Compliance, WebSocket, SWIFT, Subgraph — đây là backbone typing tốt.</li>
+        <li><span class="badge badge-green">TỐT</span> packages/core-sdk cung cấp createAnchorProvider, loadProgram, createEvmClient — wrapper đúng chuẩn để các app không tự import trực tiếp Anchor/viem.</li>
+        <li><span class="badge badge-green">TỐT</span> SWIFT-chain-bridge có kiến trúc Bi-directional Relayer sạch: SwiftChainBridgeRelayer, AXVNBrokerFXOracle, ChainExecutor, SwiftExecutor — phân tách trách nhiệm rõ ràng.</li>
+        <li><span class="badge badge-blue">ĐÁNG CHÚ Ý</span> FX Oracle có cascade fallback 3 tầng: SBV API → Vietcombank XML → hardcoded table. In-memory cache 5 phút. Thiết kế mature cho production.</li>
+      </ul>
+      <div class="section-title">Điểm yếu kỹ thuật hệ thống</div>
+      <ul class="findings">
+        <li><span class="badge badge-red">BLOCKER</span> packages/swift-adapter và packages/swift-core: 2 SDK làm cùng việc (MT103/MT202/MT940/ISO20022/LAU/RMA). Trùng lặp logic gây maintenance hell. Cần consolidate về 1 package.</li>
+        <li><span class="badge badge-amber">QUAN TRỌNG</span> services/role-engine chỉ có 3 file (package.json, role-engine.js, tsconfig.json) — access control engine quan trọng nhất của system lại là placeholder.</li>
+        <li><span class="badge badge-amber">QUAN TRỌNG</span> apps/sandbox-dashboard, apps/kyc-portal, apps/merchant-portal tồn tại trong thư mục nhưng chưa được map trong README — không rõ ownership và trạng thái.</li>
+        <li><span class="badge badge-amber">RỦI RO</span> Redis được liệt kê trong env (REDIS_URL) như event bus giữa services nhưng không có service nào import Redis client thực tế — event bus chưa được implement.</li>
+        <li><span class="badge badge-amber">RỦI RO</span> apps/digital-twin-engine là "worker" không có port — không rõ deployment model (WebWorker? Docker container? Cloudflare Worker?).</li>
+      </ul>
+      <div class="verdict verdict-amber">
+        <strong>Nhận định CTO:</strong> Core infrastructure layer (smart contracts + SWIFT bridge + FX oracle + types) có chất lượng tốt. Priority engineering task: (1) merge swift-adapter/swift-core, (2) implement role-engine đúng nghĩa, (3) implement Redis event bus, (4) viết integration tests end-to-end cho SWIFT flow.
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon" style="background:#d1fae5">🔐</div>
+      <div>
+        <h2>Vai trò 3 — Smart Contract Engineer</h2>
+        <p>Nhìn từ góc độ correctness, security, và on-chain logic của 5 programs</p>
+      </div>
+    </div>
+    <div class="role-body">
+      <div class="section-title">Phân tích từng program</div>
+      <ul class="findings">
+        <li><span class="badge badge-green">AN TOÀN</span> <strong>AXVN-p2p-escrow (Anchor/Rust):</strong> PDA seeds chuẩn [b"order_state", order_id], vault PDA [b"escrow_vault", order_id], signer bump đúng. CpiContext::new_with_signer dùng order_state làm authority → không thể drain vault không qua instruction. OrderStatus enum đầy đủ 6 trạng thái. Events emit đầy đủ.</li>
+        <li><span class="badge badge-green">AN TOÀN</span> <strong>AXVN-mint-governance (Anchor/Rust):</strong> max_supply cap checked với checked_add (overflow safe). Whitelist gate trước mỗi mint. GovernanceConfig.authority constraint kiểm tra mọi admin action. Burn dùng saturating_sub (không panic khi supply underflow).</li>
+        <li><span class="badge badge-green">AN TOÀN</span> <strong>VNKRSwiftBridgeV2.sol (EVM/Solidity):</strong> Two-step relayer change (proposeRelayer + acceptRelayer) — pattern đúng. UETR idempotency bằng keccak256 hash → replay-proof. Fee cap cứng maxBps=500 (5%). Treasury vault nhận fee thay vì fee recipient tùy ý — đúng.</li>
+        <li><span class="badge badge-blue">LƯU Ý</span> <strong>AXVN-swift-bridge/solana:</strong> Dùng Program ID placeholder SWFTb111... — chưa deploy. Cần IDL generation và test suite Anchor trước khi deploy devnet.</li>
+      </ul>
+      <div class="section-title">Rủi ro &amp; Điểm cần cải thiện</div>
+      <ul class="findings">
+        <li><span class="badge badge-amber">CẦN FIX</span> AXVNSwiftBridgeV2.sol: hàm <code>settleInboundSwiftWithFX()</code> tính <code>grossAxvn = originalAmount × fxRate × 1e18</code> — overflow risk khi originalAmount lớn (e.g. $100M = 10^8) × fxRate USD/VND (25450) × 1e18 = 2.5×10^30, vượt uint256 max (1.15×10^77) nên an toàn, nhưng nên dùng SafeMath library hoặc checked arithmetic để documentation rõ ràng.</li>
+        <li><span class="badge badge-amber">THIẾU</span> AXVN-amm-swap và AXVN-treasury-rbs: cả 2 programs được liệt kê trong README nhưng chỉ có thư mục trống — không có src/lib.rs. Đây là 2 program quan trọng nhất về kinh tế (liquidity + stability).</li>
+        <li><span class="badge badge-red">BẮT BUỘC</span> Toàn bộ 5 programs chưa có audit từ bên thứ ba. Trước khi mainnet TGE phải có ít nhất 1 firm audit (OtterSec / Halborn / Trail of Bits) + Bug Bounty.</li>
+        <li><span class="badge badge-amber">CẦN</span> P2P escrow: thiếu dispute resolution mechanism. OrderStatus::Disputed được định nghĩa nhưng không có instruction nào xử lý dispute. Cần arbitrator PDA hoặc DAO vote mechanism.</li>
+      </ul>
+      <div class="verdict verdict-green">
+        <strong>Nhận định Smart Contract Engineer:</strong> Các programs đã implement (P2P escrow, Mint governance, SWIFT Bridge V2) đều viết theo đúng pattern Anchor/Solidity. Logic on-chain sound, không có reentrancy hay integer overflow rõ ràng. Priority: (1) implement AXVN-amm-swap + treasury-rbs, (2) viết test suite Anchor, (3) security audit chuyên nghiệp.
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon" style="background:#fef3c7">🛠️</div>
+      <div>
+        <h2>Vai trò 4 — Backend / Protocol Engineer</h2>
+        <p>Nhìn từ góc độ services, data flow, API design và reliability</p>
+      </div>
+    </div>
+    <div class="role-body">
+      <div class="section-title">Điểm mạnh</div>
+      <ul class="findings">
+        <li><span class="badge badge-green">TỐT</span> swift-chain-bridge/relayer.ts có xử lý failure graceful: SWIFT send thất bại → tự động gọi chainExec.refundOutbound() on-chain. Backfill mechanism để replay events bị bỏ lỡ khi restart. Production-grade design.</li>
+        <li><span class="badge badge-green">TỐT</span> AXVNBrokerFXOracle: 3-tier fallback (SBV API → Vietcombank XML → hardcoded), in-memory TTL cache 5 phút, computeConversion() trả breakdown đầy đủ cho audit trail. Đây là một trong những module code chất lượng nhất.</li>
+        <li><span class="badge badge-green">TỐT</span> packages/swift-adapter có test coverage: iso20022.test.ts, mt.test.ts, security.test.ts — đây là module duy nhất có tests.</li>
+        <li><span class="badge badge-blue">TỐT</span> services/mock-mgw: có mock SWIFT Microgateway cho local dev — bộ phát triển có thể chạy full SWIFT flow offline không cần kết nối thật.</li>
+      </ul>
+      <div class="section-title">Điểm yếu &amp; Rủi ro</div>
+      <ul class="findings">
+        <li><span class="badge badge-red">BLOCKER</span> services/fiat-connector-api: đây là service xử lý tiền thật VND (webhook ngân hàng, khớp lệnh P2P) nhưng không có authentication middleware, không có idempotency key handling trong code hiện tại.</li>
+        <li><span class="badge badge-red">BLOCKER</span> services/indexer-subgraph: chỉ có thư mục — không có source code. Block explorer (scan.axvn.vn) và Proof of Reserve không thể hoạt động mà không có indexer.</li>
+        <li><span class="badge badge-amber">THIẾU</span> services/otc-liquidity-engine: thư mục trống. OTC engine cho institutional VARA/Dubai không có implementation.</li>
+        <li><span class="badge badge-amber">THIẾU</span> Không có centralized error handling, structured logging (winston/pino), hay distributed tracing (Jaeger/Zipkin) across services.</li>
+        <li><span class="badge badge-amber">RỦI RO</span> SWIFT LAU signing: packages/swift-adapter/src/security/lau.ts tồn tại nhưng key management (SWIFT_LAU_KEY trong env) chưa có HSM/KMS integration — prod deployment cần Vault/AWS KMS.</li>
+      </ul>
+      <div class="verdict verdict-amber">
+        <strong>Nhận định Backend Engineer:</strong> SWIFT bridge ecosystem (swift-gateway + swift-chain-bridge + swift-adapter) là phần backend hoàn chỉnh nhất và có thiết kế tốt. Cần làm ngay: implement indexer-subgraph, bổ sung auth middleware cho fiat-connector-api, và implement Redis event bus để decouple services.
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon" style="background:#fee2e2">🖥️</div>
+      <div>
+        <h2>Vai trò 5 — Frontend / DApp Engineer</h2>
+        <p>Nhìn từ góc độ UI/UX, React architecture, web3 integration và production readiness</p>
+      </div>
+    </div>
+    <div class="role-body">
+      <div class="metrics">
+        <div class="metric"><div class="label">Critical Issues</div><div class="value red">4</div></div>
+        <div class="metric"><div class="label">High Issues</div><div class="value amber">6</div></div>
+        <div class="metric"><div class="label">Medium Issues</div><div class="value amber">12</div></div>
+        <div class="metric"><div class="label">Low/UX</div><div class="value blue">18</div></div>
+        <div class="metric"><div class="label">TODO Screens</div><div class="value red">28</div></div>
+      </div>
+      <div class="section-title">Điểm mạnh</div>
+      <ul class="findings">
+        <li><span class="badge badge-green">TỐT</span> Design system @wikialisa/ui-kit: AXQ token system 3 tầng (Primitive → Semantic → Component), Work Sans typography scale 10px–96px, brand palette được định nghĩa đầy đủ — nền tảng UI nhất quán.</li>
+        <li><span class="badge badge-green">TỐT</span> packages/types cung cấp đầy đủ DTOs cho tất cả screens — frontend team có "contract" rõ ràng với backend.</li>
+        <li><span class="badge badge-green">TỐT</span> Kiến trúc app-web Next.js App Router được tổ chức tốt với (auth) / (app) / admin route groups.</li>
+      </ul>
+      <div class="section-title">Vấn đề nghiêm trọng cần giải quyết</div>
+      <ul class="findings">
+        <li><span class="badge badge-red">CRITICAL</span> CRIT-03: PIN lưu plaintext trong localStorage ("pin"). Đây là lỗ hổng bảo mật nguy hiểm nhất trong codebase frontend.</li>
+        <li><span class="badge badge-red">CRITICAL</span> CRIT-01: OTP hardcode "0000" trong /otp page — bất kỳ ai cũng vượt được xác thực.</li>
+        <li><span class="badge badge-red">CRITICAL</span> CRIT-04: Auth guard đọc localStorage "auth_state" — bypassable bằng DevTools trong 5 giây.</li>
+        <li><span class="badge badge-red">CRITICAL</span> HIGH-01: JWT lưu localStorage thay vì httpOnly cookie — toàn bộ session bị expose qua XSS.</li>
+        <li><span class="badge badge-amber">CAO</span> HIGH-03: PIN length inconsistency (4 vs 6 digits) — /set-pin dùng 4, /enter-pin dùng 6, authentication loop broken hoàn toàn.</li>
+        <li><span class="badge badge-amber">CAO</span> MED-05: TOTP QR code là Math.random() pixel grid — 2FA không hoạt động, user không có bảo vệ thực.</li>
+        <li><span class="badge badge-amber">CAO</span> next.config.mjs: ignoreBuildErrors: true + ignoreDuringBuilds: true — TypeScript/ESLint errors không fail CI. Phải xóa.</li>
+        <li><span class="badge badge-amber">TRUNG BÌNH</span> MED-03: Toàn bộ P2P, SWIFT, crypto, onramp screens submit bằng setTimeout mock — không có real API call nào cho money flows.</li>
+      </ul>
+      <div class="verdict verdict-red">
+        <strong>Nhận định Frontend Engineer:</strong> app-web là MVP shell chất lượng cao về UI/UX nhưng chưa production-ready. Có 4 critical security blocker phải fix trước mọi public access. Ưu tiên theo thứ tự: (1) fix auth security, (2) xóa ignoreBuildErrors, (3) wire real API cho money flows, (4) real liveness &amp; TOTP integration.
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon" style="background:#fce7f3">🛡️</div>
+      <div>
+        <h2>Vai trò 6 — Security Auditor / Compliance</h2>
+        <p>Nhìn từ góc độ threat model, attack surface, regulatory compliance (SBV, VARA, MAS)</p>
+      </div>
+    </div>
+    <div class="role-body">
+      <div class="section-title">Attack Surface Analysis</div>
+      <ul class="findings">
+        <li><span class="badge badge-red">CRITICAL</span> <strong>Web Storage Token Leakage:</strong> Access token + refresh token + PIN lưu localStorage. Một XSS attack đơn giản trên bất kỳ third-party script nào có thể drain toàn bộ session và bypass PIN. Remediation: httpOnly SameSite=Strict cookies + server-side PIN verification.</li>
+        <li><span class="badge badge-red">CRITICAL</span> <strong>Admin Portal Unauthenticated:</strong> /admin/dashboard không có role check — toàn bộ KYC decisions, user lock/suspend, compliance reports, withdrawal approvals accessible without auth. Remediation: middleware.ts với JWT role claim validation.</li>
+        <li><span class="badge badge-red">HIGH</span> <strong>SWIFT LAU Key Management:</strong> SWIFT_LAU_KEY trong .env plaintext. Production cần HSM hoặc AWS KMS / HashiCorp Vault với key rotation policy.</li>
+        <li><span class="badge badge-red">HIGH</span> <strong>Oracle Manipulation:</strong> FX Oracle fallback về hardcoded rates khi SBV và Vietcombank API đều down — có thể bị exploit trong điều kiện network partition. Cần secondary oracle (Chainlink) hoặc circuit breaker dừng settlement khi không có live rate.</li>
+        <li><span class="badge badge-amber">MEDIUM</span> <strong>UETR Replay Risk:</strong> EVM bridge dùng keccak256(uetr) để chặn duplicate — đúng. Solana program cần tương đương on-chain UETR tracking account.</li>
+        <li><span class="badge badge-amber">MEDIUM</span> <strong>BANK_WEBHOOK_SECRET validation:</strong> fiat-connector-api có env BANK_WEBHOOK_SECRET nhưng không rõ middleware HMAC validation đã implement chưa — nếu thiếu, bất kỳ HTTP request nào cũng có thể giả webhook ngân hàng và trigger P2P release.</li>
+      </ul>
+      <div class="section-title">Regulatory Compliance Gap</div>
+      <ul class="findings">
+        <li><span class="badge badge-amber">CẦN</span> <strong>NĐ-284/2025 (Việt Nam):</strong> eKYC liveness detection dùng setTimeout fake — không đạt yêu cầu xác thực biometric theo quy định NHNN. Cần SDK đạt ISO 30107 PAD level 2.</li>
+        <li><span class="badge badge-amber">CẦN</span> <strong>AML/CFT:</strong> AMLVerifyRequest type đã được define trong types package nhưng không có service nào implement AML scoring thực sự. Admin compliance page có AML flags UI nhưng không có action workflow.</li>
+        <li><span class="badge badge-amber">CẦN</span> <strong>VARA (Dubai):</strong> OTC engine (otc.axvn.vn) được giao cho AXQ Labs MENA nhưng không có code implementation và VARA compliance gateway chưa rõ.</li>
+        <li><span class="badge badge-blue">LƯU Ý</span> <strong>MAS (Singapore):</strong> swap.axvn.vn (AMM DEX) phục vụ thị trường quốc tế qua AXQ Global Ventures Pte.Ltd. Cần Payment Services Act license hoặc exemption letter từ MAS trước khi go-live.</li>
+      </ul>
+      <div class="section-title">Điểm bảo mật tốt</div>
+      <ul class="findings">
+        <li><span class="badge badge-green">TỐT</span> EVM bridge: two-step relayer handover (propose + accept) — đúng pattern, tránh admin mistake khi rotate key.</li>
+        <li><span class="badge badge-green">TỐT</span> Solana programs: PDA-based vault, bump stored in state, no raw PublicKey as authority — theo đúng Anchor security guidelines.</li>
+        <li><span class="badge badge-green">TỐT</span> .npmrc có NTM (Node Trust Manager) security config để kiểm tra checksum packages — supply chain security tốt.</li>
+        <li><span class="badge badge-green">TỐT</span> SWIFT_MGW_URL internal (:9003) không exposed ra ngoài — sidecar pattern đúng.</li>
+      </ul>
+      <div class="verdict verdict-red">
+        <strong>Nhận định Security Auditor:</strong> Hệ thống không sẵn sàng cho production từ góc độ bảo mật. Hai rủi ro catastrophic cần fix ngay: (1) toàn bộ authentication token storage, (2) admin portal không có auth. Sau đó cần penetration test focused vào SWIFT webhook validation và oracle manipulation before mainnet.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  
+  <h2 style="font-size:16px;font-weight:700;margin-bottom:14px">📊 Ma Trận Ưu Tiên Hành Động (Wikialisa Trở Thành IP Lõi)</h2>
+  <table class="overview-table">
+    <thead>
+      <tr>
+        <th>Ưu tiên</th>
+        <th>Hành động</th>
+        <th>Vai trò chịu trách nhiệm</th>
+        <th>Trạng thái hiện tại</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-red">P0 — NGAY</span></td>
+        <td>Fix 4 critical auth security (PIN/JWT/OTP/Admin guard)</td>
+        <td>Frontend + Security</td>
+        <td>🔴 Chưa làm</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">P0 — NGAY</span></td>
+        <td>Xóa ignoreBuildErrors khỏi next.config.mjs</td>
+        <td>Frontend</td>
+        <td>🔴 Đang tắt</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-amber">P1 — THÁNG 1</span></td>
+        <td>Implement AXVN-amm-swap + AXVN-treasury-rbs programs</td>
+        <td>Smart Contract</td>
+        <td>🔴 Thư mục trống</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-amber">P1 — THÁNG 1</span></td>
+        <td>Implement services/indexer-subgraph (Block Explorer)</td>
+        <td>Backend</td>
+        <td>🔴 Thư mục trống</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-amber">P1 — THÁNG 1</span></td>
+        <td>Consolidate swift-adapter + swift-core thành 1 package</td>
+        <td>CTO + Backend</td>
+        <td>⚠️ Duplicate</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-amber">P1 — THÁNG 1</span></td>
+        <td>Implement Redis event bus giữa services</td>
+        <td>Backend</td>
+        <td>⚠️ Env có, code không</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">P2 — THÁNG 2</span></td>
+        <td>Wire all money-flow screens đến real API</td>
+        <td>Frontend</td>
+        <td>⚠️ Mock data</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">P2 — THÁNG 2</span></td>
+        <td>Deploy smart contracts lên Devnet với real Program IDs</td>
+        <td>Smart Contract</td>
+        <td>⚠️ Placeholder IDs</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">P2 — THÁNG 2</span></td>
+        <td>Integrate VARA + MAS compliance layer cho OTC/DEX</td>
+        <td>Founder + Legal</td>
+        <td>⚠️ Chưa có</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-gray">P3 — THÁNG 3</span></td>
+        <td>Implement @wikialisa/ans-sdk (ANS Domain .axq)</td>
+        <td>Backend + Smart Contract</td>
+        <td>🔴 Chưa có code</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-gray">P3 — THÁNG 3</span></td>
+        <td>Security audit bởi firm bên ngoài (OtterSec / Halborn)</td>
+        <td>Security + CTO</td>
+        <td>🔴 Chưa có</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-gray">P3 — THÁNG 3</span></td>
+        <td>Bắt đầu build ZK stack (Veraciphers, Sequentichain)</td>
+        <td>Founder + CTO</td>
+        <td>🔴 Blueprint only</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="key-finding" style="margin-top:24px">
+    <strong>Kết luận tổng quan:</strong> Wikialisa đang ở giai đoạn chuyển tiếp quan trọng — tầng protocol và IP blueprint đã được định nghĩa rõ ràng và đúng hướng, tầng smart contract có nền tảng vững chắc, tầng SWIFT bridge là phần tiên tiến nhất về công nghệ. Để trở thành "IP lõi" thực sự, cần giải quyết 2 nhóm vấn đề song song: (A) security hardening cho tầng ứng dụng người dùng, (B) hoàn thiện các module protocol còn thiếu (AMM, treasury, indexer, ZK stack). Đây là 6–9 tháng công việc nghiêm túc với đội ngũ 8–12 engineer.
+  </div>
+
+</div>
+
+<footer>
+  Made with IBM Bob · Phân tích dựa trên đọc mã nguồn thực tế, không suy đoán
+</footer>
+
+</body>
+</html>

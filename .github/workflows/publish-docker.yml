@@ -1,0 +1,133 @@
+name: Publish Docker
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: publish-docker-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ghcr.io/${{ github.repository_owner }}/wikialisa
+
+jobs:
+  build-push:
+    name: Build & Push — ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ── Core backend ────────────────────────────────────────────────────
+          - service: api-gateway
+            dockerfile: deploy/docker/Dockerfile.api-gateway
+          # ── FinTech services ────────────────────────────────────────────────
+          - service: fiat-connector-api
+            dockerfile: deploy/docker/Dockerfile.fiat-connector-api
+          - service: otc-liquidity-engine
+            dockerfile: deploy/docker/Dockerfile.otc-liquidity-engine
+          # ── Infra services ──────────────────────────────────────────────────
+          - service: indexer-subgraph
+            dockerfile: deploy/docker/Dockerfile.indexer-subgraph
+          - service: role-engine
+            dockerfile: deploy/docker/Dockerfile.role-engine
+          # ── SWIFT stack ─────────────────────────────────────────────────────
+          - service: swift-gateway
+            dockerfile: deploy/docker/Dockerfile.swift-gateway
+          - service: swift-chain-bridge
+            dockerfile: deploy/docker/Dockerfile.swift-chain-bridge
+          # ── Monitoring ──────────────────────────────────────────────────────
+          - service: dune-alert-bots
+            dockerfile: deploy/docker/Dockerfile.dune-alert-bots
+
+          # ── Frontend apps ───────────────────────────────────────────────────
+          - service: app-web
+            dockerfile: deploy/docker/Dockerfile.app-web
+            image: ghcr.io/axqtech/app-web
+            target: runner
+          - service: id-fiat-gateway
+            dockerfile: deploy/docker/Dockerfile.id-fiat-gateway
+            image: ghcr.io/axqtech/id-fiat-gateway
+            target: runner
+          - service: pay-portal
+            dockerfile: deploy/docker/Dockerfile.pay-portal
+            image: ghcr.io/axqtech/pay-portal
+            target: runner
+          - service: explorer-vnkrscan
+            dockerfile: deploy/docker/Dockerfile.explorer-vnkrscan
+            image: ghcr.io/axqtech/explorer-vnkrscan
+            target: runner
+          - service: swap-dex
+            dockerfile: deploy/docker/Dockerfile.swap-dex
+            image: ghcr.io/axqtech/swap-dex
+            target: runner
+          - service: dao-portal
+            dockerfile: deploy/docker/Dockerfile.dao-portal
+            image: ghcr.io/axqtech/dao-portal
+            target: runner
+          - service: holding-admin-portal
+            dockerfile: deploy/docker/Dockerfile.holding-admin-portal
+            image: ghcr.io/axqtech/holding-admin-portal
+            target: runner
+          - service: digital-twin-engine
+            dockerfile: deploy/docker/Dockerfile.digital-twin-engine
+            image: ghcr.io/axqtech/digital-twin-engine
+            target: runner
+          - service: kyc-portal
+            dockerfile: deploy/docker/Dockerfile.kyc-portal
+            image: ghcr.io/axqtech/kyc-portal
+            target: runner
+          - service: merchant-portal
+            dockerfile: deploy/docker/Dockerfile.merchant-portal
+            image: ghcr.io/axqtech/merchant-portal
+            target: runner
+          - service: sandbox-dashboard
+            dockerfile: deploy/docker/Dockerfile.sandbox-dashboard
+            image: ghcr.io/axqtech/sandbox-dashboard
+            target: runner
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_PREFIX }}-${{ matrix.service }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=sha-,format=short
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          target: runner
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NODE_ENV=production
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+          provenance: true
+          sbom: true

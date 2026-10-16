@@ -1,0 +1,54 @@
+{
+  "name": "@wikialisa/db",
+  "version": "1.0.1",
+  "description": "Shared PostgreSQL connection pool and typed query helpers for AXQ backend services",
+  "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
+  "license": "BSL-1.1",
+  "homepage": "https://github.com/wikialisa/wikialisa#readme",
+  "sideEffects": false,
+  "keywords": ["wikialisa", "axvn", "postgresql", "database", "pg", "typescript", "backend"],
+  "engines": { "node": ">=22" },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "pg": "^8.13.0",
+    "@wikialisa/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wikialisa/wikialisa.git",
+    "directory": "packages/db"
+  },
+  "bugs": { "url": "https://github.com/wikialisa/wikialisa/issues" }
+}

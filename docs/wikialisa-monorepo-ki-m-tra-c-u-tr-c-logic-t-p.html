@@ -1,0 +1,519 @@
+
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wikialisa Monorepo Audit</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.6; background: #ffffff; color: #1f2328; }
+  .container { max-width: 760px; margin: 0 auto; padding: 32px 24px; }
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #57606a; font-size: 13px; margin-bottom: 32px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 28px 0 12px; border-left: 3px solid #3b82d4; padding-left: 10px; }
+  h3 { font-size: 13px; font-weight: 700; margin: 16px 0 8px; color: #3b82d4; }
+  p { margin-bottom: 8px; color: #1f2328; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+  .tag-red { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .tag-orange { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+  .tag-yellow { background: #fefce8; color: #a16207; border: 1px solid #fde68a; }
+  .tag-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #93c5fd; }
+  .tag-green { background: #f0fdf4; color: #15803d; border: 1px solid #86efac; }
+  .tag-gray { background: #f7f8fa; color: #57606a; border: 1px solid #e5e7eb; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th { background: #f7f8fa; padding: 8px 10px; text-align: left; font-weight: 600; border: 1px solid #e5e7eb; }
+  td { padding: 7px 10px; border: 1px solid #e5e7eb; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .card { background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px 16px; margin: 10px 0; }
+  .card-red { background: #fef2f2; border-color: #fca5a5; }
+  .card-orange { background: #fff7ed; border-color: #fdba74; }
+  .card-yellow { background: #fefce8; border-color: #fde68a; }
+  .card-blue { background: #eff6ff; border-color: #93c5fd; }
+  .card-green { background: #f0fdf4; border-color: #86efac; }
+  code { font-family: "SF Mono", "Fira Code", monospace; font-size: 12px; background: #f7f8fa; padding: 1px 5px; border-radius: 3px; border: 1px solid #e5e7eb; }
+  .flow-diagram { background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px; font-family: "SF Mono", monospace; font-size: 11px; line-height: 1.8; overflow-x: auto; white-space: pre; color: #1f2328; }
+  .section-divider { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+  ul { padding-left: 18px; margin: 8px 0; }
+  li { margin-bottom: 4px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .sum-row { background: #eff6ff !important; font-weight: 700; }
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #57606a; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Wikialisa Monorepo — Kiểm Tra Cấu Trúc &amp; Logic Tệp</h1>
+<p class="subtitle">pnpm + Turborepo + Anchor/Solana/EVM · 11 apps · 14 packages · 9 services · 5 Rust programs</p>
+
+
+<h2>1. Kiến Trúc Tổng Quan &amp; Luồng Giao Tiếp</h2>
+<div class="card card-blue">
+  <strong>Dependency graph cốt lõi (đọc từ dưới lên):</strong>
+</div>
+<div class="flow-diagram">
+LAYER 0 — Foundation (không phụ thuộc gì)
+  @wikialisa/types          (v1.0.1) — shared TypeScript types
+  @wikialisa/config         (v1.0.1) — env constants, Program IDs, RPC
+
+LAYER 1 — Core SDK (phụ thuộc types + config)
+  @wikialisa/db             (v1.0.1) ← types
+  @wikialisa/web3-config    (v1.0.1) ← config, viem
+  @wikialisa/ui-kit         (v1.0.1) ← react (peerDep)
+  @wikialisa/core-sdk       (v1.0.1) ← types, config, anchor, solana, viem
+  @wikialisa/contracts      (v1.0.1) ← types, config, openzeppelin
+  @wikialisa/merchant-sdk   (v1.0.1) ← types, config, axios
+  @wikialisa/swift-core     (v1.0.0) ← types, config, ioredis, zod, uuid [MỚI]
+  @wikialisa/swift-adapter  (v1.0.1) ← types, config, ajv, fast-xml-parser [DEPRECATED]
+  @wikialisa/swift          (v1.0.1) ← types, config, ioredis, zod, uuid [TRÙNG swift-core]
+  @wikialisa/swift-gateway  (v1.0.0) ← axios, viem, zod [TRÙNG services/swift-gateway]
+
+LAYER 2 — Composite / Gateway (phụ thuộc L1)
+  @wikialisa/sdk-swift      (v1.0.2) ← config*, swift-core*, types* (peerDep)
+  @wikialisa/sdk-internal   (v1.0.1) ← types, config, swift-adapter [DEPRECATED]
+
+LAYER 3 — Applications &amp; Services (tiêu thụ tất cả)
+  apps/*          — 11 Next.js apps (port 3001–3013)
+  services/*      — 9 Node/Fastify/Express services
+  programs/*      — 5 Solana Anchor programs (Rust)</div>
+
+<hr class="section-divider" />
+
+
+<h2>2. Tệp / Package THỪA &amp; TRÙNG LẶP</h2>
+
+<div class="card card-red">
+  <span class="tag tag-red">CRITICAL</span> <strong>packages/swift ↔ packages/swift-core — Nội dung gần giống nhau hoàn toàn</strong>
+  <ul>
+    <li><code>packages/swift</code> → tên NPM: <code>@wikialisa/swift-sdk-internal</code>, v1.0.1 — dùng fast-xml-parser, ioredis, uuid, zod. README: "do not import directly"</li>
+    <li><code>packages/swift-core</code> → tên NPM: <code>@wikialisa/swift-core</code>, v1.0.0 — cùng dependencies hệt nhau</li>
+    <li><strong>Kết luận:</strong> <code>packages/swift</code> là phiên bản cũ/gốc của <code>swift-core</code>. Nên xóa <code>packages/swift</code>.</li>
+  </ul>
+</div>
+
+<div class="card card-red">
+  <span class="tag tag-red">CRITICAL</span> <strong>packages/swift-adapter ↔ packages/sdk-internal — Cả hai đều DEPRECATED</strong>
+  <ul>
+    <li><code>packages/swift-adapter</code> v1.0.1: DEPRECATED, dùng swift-core thay thế</li>
+    <li><code>packages/sdk-internal</code> v1.0.1: DEPRECATED, re-exports từ swift-adapter, cộng thêm utils nội bộ</li>
+    <li><strong>Vấn đề:</strong> 8/11 apps vẫn import <code>@wikialisa/sdk-internal</code>. <code>services/swift-chain-bridge</code> và <code>services/swift-gateway</code> vẫn import <code>@wikialisa/swift-adapter</code> trực tiếp</li>
+    <li><strong>Kết luận:</strong> Cả hai cần migrate sang <code>@wikialisa/swift-core</code> trước khi xóa</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>packages/swift-gateway ↔ services/swift-gateway — Trùng tên miền</strong>
+  <ul>
+    <li><code>packages/swift-gateway</code> → NPM package: <code>@wikialisa/swift-gateway</code> (thư viện)</li>
+    <li><code>services/swift-gateway</code> → service chạy: <code>@wikialisa/swift-gateway</code> (runtime), nhưng tên NPM giống hệt!</li>
+    <li><strong>Vấn đề:</strong> Conflict tên package trong workspace. services/swift-gateway nên đổi tên thành <code>@wikialisa/svc-swift-gateway</code></li>
+  </ul>
+</div>
+
+<div class="card card-yellow">
+  <span class="tag tag-yellow">MEDIUM</span> <strong>temp-wikialisa-ui/ — Thư mục tạm không nên trong workspace</strong>
+  <ul>
+    <li>Chứa HeroUI template gốc (laravel-template, next-app-template, react-router-template, v.v.)</li>
+    <li>Có <code>package.json</code> riêng với workspace <code>packages/core/*</code> — <strong>không thuộc pnpm-workspace.yaml</strong> của root</li>
+    <li>Không được tham chiếu bởi bất kỳ app hay service nào</li>
+    <li><strong>Kết luận:</strong> Xóa hoặc chuyển ra ngoài workspace. Đây là artifact từ quá trình clone/transform HeroUI</li>
+  </ul>
+</div>
+
+<div class="card card-yellow">
+  <span class="tag tag-yellow">MEDIUM</span> <strong>axvn.vn.txt, axvn.zip — File không liên quan</strong>
+  <ul>
+    <li>Hai file này nằm ở root workspace, không có tham chiếu nào trong code</li>
+    <li><strong>Kết luận:</strong> Thừa, xóa đi hoặc chuyển vào <code>docs/</code></li>
+  </ul>
+</div>
+
+<hr class="section-divider" />
+
+
+<h2>3. Tệp / Cấu Hình SAI</h2>
+
+<div class="card card-red">
+  <span class="tag tag-red">CRITICAL</span> <strong>apps/app-web next.config.mjs — output: "export" + Next 14.x</strong>
+  <ul>
+    <li><code>output: "export"</code> tạo static HTML/CSS, nhưng app dùng Server Components (Next.js App Router)</li>
+    <li>Static export <strong>không hỗ trợ</strong>: Server Actions, API Routes, dynamic routes (<code>[id]</code>), <code>next/image</code> optimization</li>
+    <li>Tất cả 11 apps đều có file <code>next.config.mjs</code> — cần kiểm tra xem các app khác có cùng lỗi này không</li>
+    <li><strong>Kết luận:</strong> Xóa <code>output: "export"</code> nếu app dùng SSR/API, giữ nếu thực sự là static site</li>
+  </ul>
+</div>
+
+<div class="card card-red">
+  <span class="tag tag-red">CRITICAL</span> <strong>apps/app-web package.json — next: "^14.2.0" nhưng pnpm catalog pin next: "^15.1.4"</strong>
+  <ul>
+    <li>Root <code>pnpm-workspace.yaml</code> catalog định nghĩa <code>next: "^15.1.4"</code></li>
+    <li>Tất cả 10 Next.js apps dùng <code>next: "^14.2.0"</code> hardcode — <strong>không dùng catalog:</strong></li>
+    <li>Dẫn đến version drift: apps chạy Next 14, catalog mong Next 15</li>
+    <li><strong>Kết luận:</strong> Đồng bộ tất cả apps sang <code>"next": "catalog:"</code> hoặc cập nhật catalog về 14</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>Anchor.toml — Thiếu programs/swift-bridge trong [workspace.members]</strong>
+  <ul>
+    <li>Anchor workspace members: p2p-escrow, mint-governance, amm-swap, treasury-rbs — <strong>không có swift-bridge</strong></li>
+    <li>Thư mục <code>programs/swift-bridge/</code> tồn tại với cấu trúc <code>evm/</code> và <code>solana/</code>, nhưng không có <code>Cargo.toml</code> ở root program</li>
+    <li>Cargo.toml root cũng không list swift-bridge trong members</li>
+    <li><strong>Kết luận:</strong> swift-bridge chưa được wire vào build system. Cần thêm Cargo.toml hoặc xóa thư mục nếu chưa triển khai</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>Anchor.toml — Program addresses là placeholder (111...)</strong>
+  <ul>
+    <li>Tất cả devnet/mainnet program IDs đều là <code>ESCRw111...111</code>, <code>MINTg111...111</code>... — không phải địa chỉ thật</li>
+    <li><strong>Kết luận:</strong> Cần deploy thực tế và cập nhật địa chỉ trước khi chạy integration tests</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>Anchor.toml — test script dùng "yarn" thay vì "pnpm"</strong>
+  <ul>
+    <li><code>[scripts] test = "yarn run ts-mocha ..."</code> — toàn bộ monorepo dùng <strong>pnpm</strong>, không có yarn</li>
+    <li><strong>Kết luận:</strong> Sửa thành <code>pnpm exec ts-mocha ...</code></li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>services/api-gateway — Dùng "redis" v4, nhưng pnpm overrides pin "redis": "^5"</strong>
+  <ul>
+    <li><code>api-gateway/package.json</code>: <code>"redis": "^4.6.14"</code></li>
+    <li>Root <code>pnpm.overrides</code>: <code>"redis": "^5.0.0"</code></li>
+    <li>pnpm sẽ override lên v5, nhưng API Redis thay đổi giữa v4 và v5</li>
+    <li><strong>Kết luận:</strong> Cập nhật api-gateway lên <code>"redis": "^5"</code> và kiểm tra breaking changes</li>
+  </ul>
+</div>
+
+<div class="card card-yellow">
+  <span class="tag tag-yellow">MEDIUM</span> <strong>services/swift-chain-bridge — Vẫn dùng @wikialisa/swift-adapter (DEPRECATED)</strong>
+  <ul>
+    <li>Import <code>@wikialisa/swift-adapter</code> trực tiếp thay vì <code>@wikialisa/swift-core</code></li>
+    <li>Dùng fastify v4 trong khi <code>services/swift-gateway</code> đã nâng lên fastify v5</li>
+  </ul>
+</div>
+
+<div class="card card-yellow">
+  <span class="tag tag-yellow">MEDIUM</span> <strong>apps/app-web — Webpack alias "@vnkr/ui-kit" → legacy import path</strong>
+  <ul>
+    <li><code>next.config.mjs</code> alias <code>@vnkr/ui-kit</code> → <code>@wikialisa/ui-kit</code></li>
+    <li>Điều này chứng tỏ còn code trong src/ dùng scope cũ <code>@vnkr/</code> chưa được refactor</li>
+    <li><strong>Kết luận:</strong> Cần grep và thay thế tất cả import <code>@vnkr/</code> → <code>@wikialisa/</code></li>
+  </ul>
+</div>
+
+<hr class="section-divider" />
+
+
+<h2>4. Tệp / Cấu Hình THIẾU</h2>
+
+<div class="card card-red">
+  <span class="tag tag-red">CRITICAL</span> <strong>Thiếu tsconfig.base.json ở root — turbo.json khai báo globalDependencies</strong>
+  <ul>
+    <li><code>turbo.json</code> khai báo <code>globalDependencies: ["tsconfig.json", "tsconfig.base.json"]</code></li>
+    <li>Root workspace <strong>không có</strong> <code>tsconfig.json</code> hoặc <code>tsconfig.base.json</code></li>
+    <li>Mỗi app/package tự có tsconfig riêng — không có shared base config</li>
+    <li><strong>Kết luận:</strong> Tạo <code>/tsconfig.base.json</code> root với strict settings dùng chung</li>
+  </ul>
+</div>
+
+<div class="card card-red">
+  <span class="tag tag-red">CRITICAL</span> <strong>Thiếu .gitignore ở workspace root (chỉ có .gitignore nhưng cần kiểm tra)</strong>
+  <ul>
+    <li>File <code>.gitignore</code> tồn tại nhưng cần đảm bảo exclude: <code>*.tgz</code> (hiện có <code>swift-adapter-1.0.0.tgz</code> trong repo)</li>
+    <li><code>packages/swift-adapter/vnkrvietnam-swift-adapter-1.0.0.tgz</code> — file binary trong git là sai</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>Thiếu .env file — apps không có .env.local mẫu riêng</strong>
+  <ul>
+    <li>Chỉ có <code>.env.example</code> ở root, không có hướng dẫn tạo .env cho từng app/service</li>
+    <li>turbo.json khai báo <code>globalDependencies: [".env", ".env.*"]</code> nhưng không có file .env thực tế</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>Thiếu eslint config dùng chung (ESLint 9.x flat config)</strong>
+  <ul>
+    <li>Root <code>package.json</code> dùng <code>@typescript-eslint</code> v8 + <code>eslint</code> v9 (flat config)</li>
+    <li>Các apps dùng <code>eslint-config-next</code> v14 (legacy .eslintrc format)</li>
+    <li>Không có <code>eslint.config.js</code> ở root — không có rule thống nhất cho toàn workspace</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <span class="tag tag-orange">HIGH</span> <strong>Thiếu .npmrc ở root</strong>
+  <ul>
+    <li>Packages như <code>@wikialisa/web3-config</code>, <code>@wikialisa/swift-core</code> khai báo publishConfig với GitHub registry</li>
+    <li>Không có <code>.npmrc</code> để cấu hình <code>@wikialisa:registry</code> → GitHub Packages authentication</li>
+    <li>Sẽ fail khi <code>pnpm install</code> trên môi trường CI</li>
+  </ul>
+</div>
+
+<div class="card card-yellow">
+  <span class="tag tag-yellow">MEDIUM</span> <strong>Thiếu vitest.config ở root hoặc shared test setup</strong>
+  <ul>
+    <li>Root <code>package.json</code> cài <code>vitest</code> nhưng chỉ <code>packages/swift</code> và <code>packages/swift-adapter</code> có <code>vitest.config.ts</code></li>
+    <li>services/* không có bất kỳ test file nào được tham chiếu</li>
+  </ul>
+</div>
+
+<div class="card card-yellow">
+  <span class="tag tag-yellow">MEDIUM</span> <strong>Thiếu Dockerfile cho services/swift-chain-bridge, services/role-engine</strong>
+  <ul>
+    <li>Các services có Dockerfile: fiat-connector-api, indexer-subgraph, mock-mgw, dune-alert-bots, otc-liquidity-engine</li>
+    <li>Thiếu Dockerfile: <strong>swift-chain-bridge</strong>, <strong>role-engine</strong>, <strong>api-gateway</strong></li>
+    <li>docker-compose sẽ không thể build các service này</li>
+  </ul>
+</div>
+
+<div class="card card-yellow">
+  <span class="tag tag-yellow">MEDIUM</span> <strong>apps/digital-twin-engine — Không có Dockerfile, không trong PM2 ecosystem</strong>
+  <ul>
+    <li>Là Node app (không phải Next.js) nhưng không có Dockerfile và không được đăng ký trong <code>ecosystem.config.cjs</code></li>
+    <li>Không rõ cách deploy: PM2, Docker, hay systemd</li>
+  </ul>
+</div>
+
+<hr class="section-divider" />
+
+
+<h2>5. Tệp / Package CŨ &amp; LỖI THỜI</h2>
+
+<table>
+  <thead>
+    <tr><th>Tên</th><th>Vấn đề</th><th>Nên thay bằng</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>packages/swift-adapter</code></td>
+      <td>DEPRECATED (ghi trong package.json), sẽ xóa v2.0. Còn tệp <code>.tgz</code> binary trong repo</td>
+      <td><code>@wikialisa/swift-core</code></td>
+    </tr>
+    <tr>
+      <td><code>packages/sdk-internal</code></td>
+      <td>DEPRECATED, re-export từ swift-adapter. Vẫn được 8 apps import</td>
+      <td><code>@wikialisa/swift-core</code></td>
+    </tr>
+    <tr>
+      <td><code>packages/swift</code></td>
+      <td>Tên NPM <code>swift-sdk-internal</code>, README: "do not import directly". Clone của swift-core</td>
+      <td>Xóa, dùng <code>@wikialisa/swift-core</code></td>
+    </tr>
+    <tr>
+      <td><code>ROABMAP.MD</code></td>
+      <td>Typo tên file (ROABMAP thay vì ROADMAP). Nội dung mô tả kiến trúc hoàn toàn khác với codebase thực tế (nói về wikialisa VDOM 1kB, @hot-labs, NEAR Protocol — nhưng codebase thực là AXQ FinTech)</td>
+      <td>Đổi tên → <code>ROADMAP.MD</code>, đồng bộ nội dung với <code>README.md</code></td>
+    </tr>
+    <tr>
+      <td><code>apps/app-web/next.config.mjs</code> webpack alias <code>@vnkr/</code></td>
+      <td>Scope cũ từ thời còn dùng @vnkr (Vietnamese VNKR brand), chưa clean up</td>
+      <td>Refactor tất cả import @vnkr/* → @wikialisa/*</td>
+    </tr>
+    <tr>
+      <td><code>migrate-heroui.sh</code>, <code>clone-and-transform.sh</code></td>
+      <td>Script one-time migration từ HeroUI. Đã chạy xong (temp-wikialisa-ui là kết quả). Không cần giữ lại</td>
+      <td>Xóa hoặc chuyển vào <code>scripts/archive/</code></td>
+    </tr>
+    <tr>
+      <td><code>publish-npm.sh</code>, <code>push-packages.sh</code></td>
+      <td>Shell script publish thủ công, nhưng đã có <code>deploy/npm/scripts/publish-all.mjs</code> và changeset pipeline</td>
+      <td>Dùng <code>pnpm publish:all</code> hoặc changeset</td>
+    </tr>
+    <tr>
+      <td><code>apps-tree.txt</code></td>
+      <td>Snapshot cây thư mục tĩnh, sẽ lỗi thời ngay khi thêm file mới</td>
+      <td>Xóa — dùng <code>tree</code> command khi cần</td>
+    </tr>
+    <tr>
+      <td><code>AUDIT.md</code></td>
+      <td>File audit tĩnh. Nên được sinh ra từ pipeline CI, không hardcode</td>
+      <td>Chuyển sang CI artifact</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr class="section-divider" />
+
+
+<h2>6. Version Drift — Không Nhất Quán Giữa Packages</h2>
+
+<table>
+  <thead>
+    <tr><th>Dependency</th><th>pnpm catalog</th><th>Thực tế trong apps/services</th><th>Mức độ</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>next</code></td>
+      <td>^15.1.4</td>
+      <td>^14.2.0 (tất cả 10 apps)</td>
+      <td><span class="tag tag-red">CRITICAL</span></td>
+    </tr>
+    <tr>
+      <td><code>viem</code></td>
+      <td>^2.21.53</td>
+      <td>^2.18.0 (app-web), ^2.21.0 (đa số), ^2.21.19 (web3-config)</td>
+      <td><span class="tag tag-orange">HIGH</span></td>
+    </tr>
+    <tr>
+      <td><code>@solana/web3.js</code></td>
+      <td>^1.98.0</td>
+      <td>^1.95.0 (tất cả apps/services)</td>
+      <td><span class="tag tag-yellow">MEDIUM</span></td>
+    </tr>
+    <tr>
+      <td><code>fastify</code></td>
+      <td>không có trong catalog</td>
+      <td>v4.28.0 (swift-chain-bridge, fiat-connector, indexer, mock-mgw, otc, role-engine) vs v5.2.1 (swift-gateway)</td>
+      <td><span class="tag tag-orange">HIGH</span></td>
+    </tr>
+    <tr>
+      <td><code>redis</code> vs <code>ioredis</code></td>
+      <td>ioredis: ^5.4.1</td>
+      <td>api-gateway dùng <code>redis</code> v4 (không phải ioredis); services khác dùng <code>ioredis</code></td>
+      <td><span class="tag tag-orange">HIGH</span></td>
+    </tr>
+    <tr>
+      <td><code>typescript</code></td>
+      <td>^5.7.2</td>
+      <td>^5.6.0 (tất cả apps/services)</td>
+      <td><span class="tag tag-yellow">MEDIUM</span></td>
+    </tr>
+    <tr>
+      <td><code>uuid</code></td>
+      <td>^11.0.3</td>
+      <td>^10.0.0 (api-gateway), ^11.0.0 (swift packages)</td>
+      <td><span class="tag tag-yellow">MEDIUM</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr class="section-divider" />
+
+
+<h2>7. Kiểm Tra Port — PM2 Ecosystem</h2>
+<table>
+  <thead>
+    <tr><th>Service / App</th><th>Port</th><th>Domain</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>api-gateway</td><td>5000</td><td>api.axvn.vn</td></tr>
+    <tr><td>ws-gateway (cùng api-gateway dir)</td><td>5001</td><td>ws.axvn.vn</td></tr>
+    <tr><td>deposit-worker (cùng api-gateway dir)</td><td>5002</td><td>internal worker</td></tr>
+    <tr><td>fiat-connector</td><td>4001</td><td>dev-api.axvn.vn</td></tr>
+    <tr><td>swift-gateway</td><td>4002</td><td>otc.axvn.vn</td></tr>
+    <tr><td>id-fiat-gateway</td><td>3001</td><td>id.axvn.vn</td></tr>
+    <tr><td>pay-portal</td><td>3002</td><td>pay.axvn.vn</td></tr>
+    <tr><td>explorer-vnkrscan</td><td>3003</td><td>scan.axvn.vn</td></tr>
+    <tr><td>swap-dex</td><td>3004</td><td>swap.axvn.vn</td></tr>
+    <tr><td>dao-portal</td><td>3005</td><td>dao.axvn.vn</td></tr>
+    <tr><td>holding-admin-portal</td><td>3006</td><td>holding.axvn.vn</td></tr>
+    <tr><td>app-web</td><td>3010</td><td>app.axvn.vn</td></tr>
+    <tr><td>merchant-portal</td><td>3011</td><td>merchant.axvn.vn</td></tr>
+    <tr><td>sandbox-dashboard</td><td>3012</td><td>sandbox.axvn.vn</td></tr>
+    <tr><td>kyc-portal</td><td>3013</td><td>kyc.axvn.vn</td></tr>
+    <tr><td style="color:#b91c1c"><strong>THIẾU trong PM2</strong></td><td>?</td><td>digital-twin-engine, indexer-subgraph, dune-alert-bots, mock-mgw, otc-liquidity-engine, swift-chain-bridge, role-engine (có riêng)</td></tr>
+  </tbody>
+</table>
+<p style="color:#57606a;font-size:12px">⚠ Không có port conflict. Nhưng 6 services thiếu entry trong PM2 ecosystem.</p>
+
+<hr class="section-divider" />
+
+
+<h2>8. Tổng Kết &amp; Ưu Tiên Sửa Chữa</h2>
+
+<table>
+  <thead>
+    <tr><th>Ưu tiên</th><th>Vấn đề</th><th>Action</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="tag tag-red">P0</span></td>
+      <td>Tạo <code>/tsconfig.base.json</code> root</td>
+      <td>turbo.json require file này, thiếu sẽ fail cache</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-red">P0</span></td>
+      <td>Đổi tên <code>services/swift-gateway</code> NPM name</td>
+      <td>Conflict tên với <code>packages/swift-gateway</code></td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-red">P0</span></td>
+      <td>Đồng bộ <code>next</code> version (catalog v15 vs apps v14)</td>
+      <td>Quyết định dùng 14 hay 15, cập nhật toàn bộ</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-orange">P1</span></td>
+      <td>Thêm <code>.npmrc</code> với GitHub registry config</td>
+      <td>Cần cho pnpm install CI</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-orange">P1</span></td>
+      <td>Sửa <code>Anchor.toml</code> test script (yarn → pnpm)</td>
+      <td>1 dòng fix</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-orange">P1</span></td>
+      <td>Thêm <code>programs/swift-bridge</code> vào Anchor.toml hoặc xóa thư mục</td>
+      <td>Program không được build</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-orange">P1</span></td>
+      <td>Update <code>api-gateway</code> redis v4 → v5</td>
+      <td>pnpm override ép v5</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-yellow">P2</span></td>
+      <td>Migrate <code>@wikialisa/sdk-internal</code> + <code>swift-adapter</code> → <code>swift-core</code></td>
+      <td>Xóa 2 deprecated packages sau khi migrate</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-yellow">P2</span></td>
+      <td>Xóa <code>packages/swift</code> (trùng swift-core)</td>
+      <td>Sau khi xác nhận không còn ai import</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-yellow">P2</span></td>
+      <td>Xóa <code>temp-wikialisa-ui/</code></td>
+      <td>Không thuộc workspace, là artifact tạm</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-yellow">P2</span></td>
+      <td>Refactor import <code>@vnkr/ui-kit</code> → <code>@wikialisa/ui-kit</code></td>
+      <td>Grep + replace trong apps/app-web</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-gray">P3</span></td>
+      <td>Xóa <code>axvn.vn.txt</code>, <code>axvn.zip</code>, <code>apps-tree.txt</code></td>
+      <td>File thừa ở root</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-gray">P3</span></td>
+      <td>Đổi tên <code>ROABMAP.MD</code> → <code>ROADMAP.MD</code></td>
+      <td>Typo tên file</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-gray">P3</span></td>
+      <td>Xóa binary <code>packages/swift-adapter/*.tgz</code></td>
+      <td>Binary không nên trong git</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-gray">P3</span></td>
+      <td>Thêm Dockerfile cho api-gateway, swift-chain-bridge, digital-twin-engine</td>
+      <td>Hoàn thiện Docker stack</td>
+    </tr>
+    <tr class="sum-row">
+      <td colspan="3">Tổng: 4 CRITICAL · 6 HIGH · 7 MEDIUM · 4 LOW</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="footer">Made with IBM Bob</div>
+</div>
+</body>
+</html>

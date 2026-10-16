@@ -1,0 +1,79 @@
+{
+  "name": "@wikialisa/config",
+  "version": "1.0.1",
+  "description": "Environment constants, Program IDs, Seed PDAs, RPC endpoints and feature flags for the WIKIALISA ($AXQ) ecosystem",
+  "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
+  "license": "BSL-1.1",
+  "homepage": "https://github.com/wikialisa/wikialisa#readme",
+  "sideEffects": false,
+  "keywords": [
+    "wikialisa",
+    "axvn",
+    "axq",
+    "config",
+    "constants",
+    "solana",
+    "evm",
+    "program-ids",
+    "rpc",
+    "feature-flags",
+    "fintech",
+    "blockchain",
+    "vietnam"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./server": {
+      "import": {
+        "types": "./dist/server.d.mts",
+        "default": "./dist/server.mjs"
+      },
+      "require": {
+        "types": "./dist/server.d.ts",
+        "default": "./dist/server.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/server.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts src/server.ts --format cjs,esm --dts --watch",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wikialisa/wikialisa.git",
+    "directory": "packages/config"
+  },
+  "bugs": {
+    "url": "https://github.com/wikialisa/wikialisa/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

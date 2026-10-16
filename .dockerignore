@@ -1,0 +1,91 @@
+# ─── .dockerignore — Wikialisa Monorepo ────────────────────────────────────
+# Loại trừ mọi file không cần thiết khi build Docker image.
+# Context được gửi lên Docker daemon = toàn bộ monorepo root.
+# Rule: loại trừ nhiều nhất có thể, chỉ giữ những gì Dockerfile COPY cần.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Version control ───────────────────────────────────────────────────────────
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# ── Build outputs (re-generated inside container) ─────────────────────────────
+**/dist/
+**/build/
+**/.next/
+**/out/
+**/coverage/
+**/*.tsbuildinfo
+**/tsconfig.tsbuildinfo
+
+# ── Dependencies (re-installed inside container) ──────────────────────────────
+**/node_modules/
+
+# ── Rust / Anchor / Solana on-chain programs ──────────────────────────────────
+programs/
+target/
+**/*.so
+**/*.keypair.json
+
+# ── Vendor / heavy binaries ───────────────────────────────────────────────────
+services/swift-gateway/vendor/
+**/vendor/
+
+# ── Turborepo cache ───────────────────────────────────────────────────────────
+.turbo/
+**/.turbo/
+
+# ── Dev / local env files ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Certificates & secrets ────────────────────────────────────────────────────
+certs/
+**/*.pem
+**/*.key
+**/*.crt
+**/*.p12
+**/*.ks
+**/*.enc
+
+# ── Logs & runtime state ──────────────────────────────────────────────────────
+.log/
+**/*.log
+.pm2/
+dump.rdb
+
+# ── Editor & OS ───────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# ── Test & documentation ─────────────────────────────────────────────────────
+**/__tests__/
+**/__mocks__/
+**/test/
+**/tests/
+docs/
+*.md
+!packages/*/README.md
+
+# ── CI temp artefacts ─────────────────────────────────────────────────────────
+*.zip
+*.tar.gz
+
+# ── Bob / AI tooling ──────────────────────────────────────────────────────────
+.bob/
+.wikialisa/
+
+# ── Terraform ─────────────────────────────────────────────────────────────────
+deploy/terraform/
+deploy/nginx/
+
+# ── Anchor / Cargo (Rust) ─────────────────────────────────────────────────────
+Cargo.lock
+Cargo.toml
+Anchor.toml

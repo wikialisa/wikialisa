@@ -1,0 +1,27 @@
+{
+  "name": "@wikialisa/role-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Global Leadership Automation Engine — Event-driven Worker tự động kích hoạt 10 vai trò lãnh đạo theo ma trận Finance & Blockchain",
+  "main": "role-engine.js",
+  "type": "commonjs",
+  "scripts": {
+    "build":     "echo 'role-engine: no build step (plain JS)'",
+    "dev":       "node --watch role-engine.js",
+    "start":     "node role-engine.js",
+    "lint":      "echo 'role-engine: no lint configured'",
+    "typecheck": "echo 'role-engine: no typecheck (plain JS)'",
+    "test":      "echo 'role-engine: no tests configured'",
+    "clean":     "echo 'role-engine: nothing to clean'",
+    "pm2:start": "pm2 start ../../ecosystem.config.cjs --only role-engine",
+    "pm2:stop":  "pm2 stop role-engine",
+    "pm2:logs":  "pm2 logs role-engine"
+  },
+  "dependencies": {
+    "@wikialisa/types":  "workspace:*",
+    "@wikialisa/config": "workspace:*"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

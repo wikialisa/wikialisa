@@ -1,0 +1,52 @@
+name: Publish NPM
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: publish-npm-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: "22.14.0"
+  PNPM_VERSION: "9.15.9"
+
+jobs:
+  publish:
+    name: Build & Publish @wikialisa/* packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write   # npm provenance
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages (Turborepo)
+        run: pnpm turbo run build --filter="./packages/*" --cache-dir=.turbo
+
+      - name: Test packages before publish
+        run: pnpm turbo run test --filter="./packages/*" --cache-dir=.turbo
+        env:
+          NODE_ENV: test
+
+      - name: Publish to npmjs.com
+        run: pnpm publish:all
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

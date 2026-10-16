@@ -1,0 +1,84 @@
+{
+  "name": "@wikialisa/swift-core",
+  "version": "1.0.0",
+  "description": "WIKIALISA SWIFT Core — MT/MX message builders, ISO 20022 parsers, LAU/RMA security, Zod schemas, UETR and Redis event bus client",
+  "author": "AXQ Tech Holding JSC <dev@axvn.vn>",
+  "license": "BSL-1.1",
+  "homepage": "https://github.com/wikialisa/wikialisa#readme",
+  "sideEffects": false,
+  "keywords": [
+    "wikialisa", "axvn", "swift", "mt103", "mt202", "mt940",
+    "iso20022", "pacs008", "pacs009", "camt053", "lau", "rma",
+    "gpi", "uetr", "fintech", "banking", "institutional", "payments", "typescript"
+  ],
+  "engines": { "node": ">=22" },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": { "types": "./dist/index.d.mts", "default": "./dist/index.mjs" },
+      "require": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+    },
+    "./mt": {
+      "import": { "types": "./dist/mt/index.d.mts", "default": "./dist/mt/index.mjs" },
+      "require": { "types": "./dist/mt/index.d.ts", "default": "./dist/mt/index.js" }
+    },
+    "./iso20022": {
+      "import": { "types": "./dist/iso20022/index.d.mts", "default": "./dist/iso20022/index.mjs" },
+      "require": { "types": "./dist/iso20022/index.d.ts", "default": "./dist/iso20022/index.js" }
+    },
+    "./security": {
+      "import": { "types": "./dist/security/index.d.mts", "default": "./dist/security/index.mjs" },
+      "require": { "types": "./dist/security/index.d.ts", "default": "./dist/security/index.js" }
+    },
+    "./schemas": {
+      "import": { "types": "./dist/schemas/index.d.mts", "default": "./dist/schemas/index.mjs" },
+      "require": { "types": "./dist/schemas/index.d.ts", "default": "./dist/schemas/index.js" }
+    },
+    "./utils": {
+      "import": { "types": "./dist/utils/index.d.mts", "default": "./dist/utils/index.mjs" },
+      "require": { "types": "./dist/utils/index.d.ts", "default": "./dist/utils/index.js" }
+    },
+    "./client": {
+      "import": { "types": "./dist/client/index.d.mts", "default": "./dist/client/index.mjs" },
+      "require": { "types": "./dist/client/index.d.ts", "default": "./dist/client/index.js" }
+    }
+  },
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build":         "tsup --config tsup.config.ts",
+    "dev":           "tsup --config tsup.config.ts --watch",
+    "lint":          "eslint src",
+    "typecheck":     "tsc --noEmit",
+    "test":          "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch":    "vitest",
+    "clean":         "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@wikialisa/config": "workspace:*",
+    "@wikialisa/types": "workspace:*",
+    "fast-xml-parser": "^4.4.1",
+    "ioredis": "^5.4.1",
+    "uuid": "^11.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wikialisa/wikialisa.git",
+    "directory": "packages/swift-core"
+  },
+  "bugs": { "url": "https://github.com/wikialisa/wikialisa/issues" }
+}

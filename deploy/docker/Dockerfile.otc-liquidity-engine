@@ -1,0 +1,65 @@
+# ─── Dockerfile: otc-liquidity-engine ────────────────────────────────────────
+# Service: @wikialisa/otc-liquidity-engine
+# Port: 4002
+# Stages: base → builder → dev | runner
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM node:22-alpine AS base
+WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json tsconfig.base.json ./
+
+# ── Builder ────────────────────────────────────────────────────────────────────
+FROM base AS builder
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+COPY packages/types    ./packages/types
+COPY packages/config   ./packages/config
+COPY packages/db       ./packages/db
+COPY packages/core-sdk ./packages/core-sdk
+
+COPY services/otc-liquidity-engine ./services/otc-liquidity-engine
+
+RUN pnpm install --frozen-lockfile --prefer-offline
+
+RUN pnpm --filter @wikialisa/types              build
+RUN pnpm --filter @wikialisa/config             build
+RUN pnpm --filter @wikialisa/db                 build
+RUN pnpm --filter @wikialisa/core-sdk           build
+RUN pnpm --filter @wikialisa/otc-liquidity-engine build
+
+# ── Dev stage ─────────────────────────────────────────────────────────────────
+FROM builder AS dev
+ENV NODE_ENV=development
+EXPOSE 4002
+CMD ["pnpm", "--filter", "@wikialisa/otc-liquidity-engine", "dev"]
+
+# ── Runner ────────────────────────────────────────────────────────────────────
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+
+COPY --from=builder /app/services/otc-liquidity-engine/dist         ./services/otc-liquidity-engine/dist
+COPY --from=builder /app/services/otc-liquidity-engine/package.json ./services/otc-liquidity-engine/package.json
+COPY --from=builder /app/packages/types/dist       ./packages/types/dist
+COPY --from=builder /app/packages/types/package.json ./packages/types/package.json
+COPY --from=builder /app/packages/config/dist      ./packages/config/dist
+COPY --from=builder /app/packages/config/package.json ./packages/config/package.json
+COPY --from=builder /app/packages/db/dist          ./packages/db/dist
+COPY --from=builder /app/packages/db/package.json  ./packages/db/package.json
+COPY --from=builder /app/packages/core-sdk/dist    ./packages/core-sdk/dist
+COPY --from=builder /app/packages/core-sdk/package.json ./packages/core-sdk/package.json
+COPY --from=builder /app/node_modules              ./node_modules
+COPY --from=builder /app/package.json              ./package.json
+COPY --from=builder /app/pnpm-workspace.yaml       ./pnpm-workspace.yaml
+
+EXPOSE 4002
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://localhost:4002/health || exit 1
+
+CMD ["node", "services/otc-liquidity-engine/dist/index.js"]

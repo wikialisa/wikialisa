@@ -1,0 +1,48 @@
+# Mã nguồn gốc — không cần thiết sau khi build
+src/
+
+# File kiểm thử
+tests/
+**/*.test.ts
+**/*.spec.ts
+vitest.config.ts
+
+# Cấu hình TypeScript & công cụ phát triển
+tsconfig.json
+tsconfig*.json
+.eslintrc*
+.eslintignore
+eslint.config.*
+.prettierrc*
+.editorconfig
+
+# Biến môi trường
+.env
+.env.*
+!.env.example
+
+# Config templates (chỉ dành cho nội bộ)
+config/
+
+# Thư mục Node.js
+node_modules/
+
+# Log và cache
+*.log
+.turbo/
+.cache/
+
+# IDE và hệ điều hành
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.husky/

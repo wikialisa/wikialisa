@@ -1,0 +1,98 @@
+{
+  "name": "wikialisa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AXQ TECH HOLDING JSC — Enterprise Monorepo (pnpm + Turborepo + Anchor/Solana/EVM)",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:apps": "turbo run dev --filter='./apps/*'",
+    "dev:services": "turbo run dev --filter='./services/*'",
+    "dev:pm2": "mkdir -p .pm2/logs && pm2 start ecosystem.dev.cjs",
+    "dev:pm2:stop": "pm2 stop ecosystem.dev.cjs",
+    "dev:pm2:restart": "pm2 restart ecosystem.dev.cjs",
+    "dev:pm2:logs": "pm2 logs",
+    "dev:pm2:status": "pm2 status",
+    "start:pm2": "mkdir -p .pm2/logs && pm2 start ecosystem.config.cjs",
+    "stop:pm2": "pm2 stop ecosystem.config.cjs",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:swift": "pnpm --filter @wikialisa/swift-core test",
+    "test:ci": "turbo run test --filter=@wikialisa/swift-core --filter=@wikialisa/core-sdk --filter=@wikialisa/merchant-sdk",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && find . -name 'node_modules' -maxdepth 4 -type d -prune -exec rm -rf {} + && find . -name '.turbo' -maxdepth 4 -type d -exec rm -rf {} + && rm -f dump.rdb",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md,yaml}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md,yaml}\" --ignore-path .gitignore",
+    "pack:zip": "zip -r wikialisa.zip . -x '*node_modules*' '*.turbo*' 'dump.rdb' '*.zip' '*/.next/*'",
+    "seed:pg": "psql ${DATABASE_URL} -f deploy/db/01_schema.sql -f deploy/db/02_seed.sql -f deploy/db/03_views.sql -f deploy/db/04_roles.sql",
+    "seed:mongo": "mongosh \"${MONGODB_URI}\" --file deploy/db/mongo-seed.js",
+    "seed:all": "pnpm seed:pg && pnpm seed:mongo",
+    "dev:docker": "docker compose -f deploy/docker/docker-compose.yml -f deploy/docker/docker-compose.dev.yml up -d",
+    "stop:docker": "docker compose -f deploy/docker/docker-compose.yml -f deploy/docker/docker-compose.dev.yml down",
+    "publish:all": "node deploy/npm/scripts/publish-all.mjs",
+    "publish:dry": "node deploy/npm/scripts/publish-all.mjs --dry-run",
+    "version:patch": "node deploy/npm/scripts/bump-version.mjs patch",
+    "version:minor": "node deploy/npm/scripts/bump-version.mjs minor",
+    "version:major": "node deploy/npm/scripts/bump-version.mjs major",
+    "changeset": "changeset",
+    "changeset:add": "changeset add",
+    "changeset:version": "changeset version",
+    "changeset:publish": "pnpm build && pnpm test && changeset publish",
+    "changeset:status": "changeset status --verbose",
+    "changeset:tag": "changeset tag"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.1",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsup": "^8.3.5",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.6",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "chalk": "^5.3.0",
+    "execa": "^9.3.0",
+    "fast-xml-parser": "^4.5.0",
+    "globby": "^14.0.2",
+    "semver": "^7.6.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@sqds/sdk": "2.0.4",
+      "bs58": "^5.0.0",
+      "redis": "^5.0.0",
+      "chai": "^4.5.0"
+    },
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "bs58",
+        "@solana/sysvars",
+        "utf-8-validate"
+      ],
+      "allowedVersions": {
+        "react": "18",
+        "react-dom": "18",
+        "@types/react": "18",
+        "ws": "7 || 8"
+      }
+    }
+  }
+}
