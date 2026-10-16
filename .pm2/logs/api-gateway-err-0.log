@@ -1,1 +1,2 @@
 2026-10-16 21:51:55 +00:00: [DB] Failed to connect: Connection terminated due to connection timeout
+2026-10-16 22:16:19 +00:00: [DB] Failed to connect: SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string

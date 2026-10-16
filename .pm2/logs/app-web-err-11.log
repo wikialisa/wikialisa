@@ -2950,3 +2950,4 @@
 2026-10-16 22:08:05 +00:00:   path: '/root/workspace/apps/app-web/.next/prerender-manifest.json'
 2026-10-16 22:08:05 +00:00: }
 2026-10-16 22:08:08 +00:00:  ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+2026-10-16 22:16:18 +00:00:  ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.

@@ -9,7 +9,7 @@ CLI Target: es2020
 CLI Cleaning output folder
 CJS Build start
 CJS dist/index.js 14.81 KB
-CJS ⚡️ Build success in 179ms
+CJS ⚡️ Build success in 228ms
 DTS Build start
-DTS ⚡️ Build success in 6231ms
+DTS ⚡️ Build success in 3364ms
 DTS dist/index.d.ts 13.00 B

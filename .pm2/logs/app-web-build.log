@@ -12,3 +12,50 @@
  ✓ Generating static pages (39/39)
    Finalizing page optimization ...
    Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    361 B          87.6 kB
+├ ○ /_not-found                          876 B          88.1 kB
+├ ○ /admin/cms                           2.83 kB        99.6 kB
+├ ○ /admin/compliance                    5.1 kB         95.3 kB
+├ ○ /admin/dashboard                     1.99 kB        95.1 kB
+├ ○ /admin/finance                       1.76 kB        98.5 kB
+├ ○ /admin/kyc                           2.4 kB         99.2 kB
+├ ○ /admin/users                         2.36 kB        99.1 kB
+├ ○ /auto-debit                          5.04 kB        98.4 kB
+├ ○ /card                                6.28 kB         103 kB
+├ ○ /cashback                            7.12 kB         103 kB
+├ ○ /confirm-pin                         2.69 kB        89.9 kB
+├ ○ /crypto                              4.39 kB        97.4 kB
+├ ○ /crypto-deposit                      5.99 kB         102 kB
+├ ○ /ekyc                                3.27 kB        96.7 kB
+├ ○ /enter-pin                           5.29 kB        95.5 kB
+├ ○ /forgot-password                     4.9 kB         95.1 kB
+├ ○ /home                                2.73 kB         105 kB
+├ ○ /learn                               3.99 kB        94.2 kB
+├ ○ /login                               4.2 kB         94.4 kB
+├ ○ /more                                5.88 kB        99.3 kB
+├ ○ /onboarding                          2.74 kB          93 kB
+├ ○ /onramp                              5.15 kB        95.4 kB
+├ ○ /otp                                 5.92 kB        96.2 kB
+├ ○ /p2p                                 5.95 kB         103 kB
+├ ○ /qr-scan                             3.6 kB         99.8 kB
+├ ○ /receipt                             3.79 kB          94 kB
+├ ○ /referral                            6.81 kB          97 kB
+├ ○ /register                            3.04 kB        93.3 kB
+├ ○ /reset-pin                           5.55 kB        95.8 kB
+├ ○ /security                            4.94 kB        98.3 kB
+├ ○ /set-pin                             1.71 kB          89 kB
+├ ○ /splash                              1.58 kB        88.8 kB
+├ ○ /support                             4.47 kB        97.9 kB
+├ ○ /swift                               6.61 kB        96.8 kB
+├ ○ /transfer                            4.47 kB         101 kB
+└ ○ /uetr                                4.95 kB        95.2 kB
++ First Load JS shared by all            87.3 kB
+  ├ chunks/1528-86693e6c66e53e18.js      31.7 kB
+  ├ chunks/1dd3208c-c720e1298a20505f.js  53.6 kB
+  └ other shared chunks (total)          1.9 kB
+
+
+○  (Static)  prerendered as static content
+
