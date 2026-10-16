@@ -52,17 +52,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    const authState = localStorage.getItem("auth_state");
+    const authState   = localStorage.getItem("auth_state");
     const accessToken = localStorage.getItem("access_token");
+    const returnUrl   = encodeURIComponent(pathname);
 
-    // Must have both onboarded flag AND a token
-    if (authState !== "onboarded" || !accessToken) {
-      // Preserve intended destination so enter-pin can redirect back
-      const returnUrl = encodeURIComponent(pathname);
+    if (authState === "onboarded" && accessToken) {
+      // Fully authenticated — allow through
+      setAuthChecked(true);
+      return;
+    }
+
+    if (authState === "pin_set") {
+      // Has PIN but no active session → go to enter-pin
       router.replace(`/enter-pin?returnUrl=${returnUrl}`);
       return;
     }
-    setAuthChecked(true);
+
+    // New user (nothing in storage) → start from onboarding
+    router.replace(`/onboarding?returnUrl=${returnUrl}`);
   }, [pathname, router]);
 
   // Show nothing while auth check is in progress (prevents flash of content)

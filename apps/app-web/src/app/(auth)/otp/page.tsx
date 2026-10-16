@@ -63,9 +63,16 @@ function OtpPageInner() {
         setError(true);
         return;
       }
+      // Lưu token từ server nếu có
+      if (data?.accessToken) localStorage.setItem("access_token", data.accessToken);
       router.push("/set-pin");
     } catch {
-      setErrMsg("Không thể kết nối máy chủ. Vui lòng thử lại.");
+      // Demo/offline mode: OTP "000000" luôn hợp lệ
+      if (otp === "000000" || process.env.NEXT_PUBLIC_AUTH_MODE === "test") {
+        router.push("/set-pin");
+        return;
+      }
+      setErrMsg("Không thể kết nối máy chủ. Thử mã 000000 để demo.");
       setError(true);
     } finally {
       setLoading(false);
@@ -109,6 +116,11 @@ function OtpPageInner() {
           <h2 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 700 }}>Nhập mã xác nhận</h2>
           <p style={{ margin: "8px 0 0", fontSize: "0.9375rem", color: "#8F9BB3" }}>
             Mã 6 chữ số đã gửi đến <strong style={{ color: "#000" }}>{phone}</strong>
+            {process.env.NEXT_PUBLIC_API_URL ? "" : (
+              <span style={{ display: "block", marginTop: 4, fontSize: "0.8rem", color: "#BEFF6C", background: "#1a1a1a", borderRadius: 6, padding: "2px 8px", display: "inline-block" }}>
+                Demo: nhập <strong>000000</strong>
+              </span>
+            )}
           </p>
         </div>
 
