@@ -2898,3 +2898,31 @@
 2026-10-16 22:07:17 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
 2026-10-16 22:07:17 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
 2026-10-16 22:07:17 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
+2026-10-16 22:07:18 +00:00: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2026-10-16 22:07:18 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
+2026-10-16 22:07:18 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
+2026-10-16 22:07:18 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
+2026-10-16 22:07:19 +00:00: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2026-10-16 22:07:19 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
+2026-10-16 22:07:19 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
+2026-10-16 22:07:19 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
+2026-10-16 22:07:21 +00:00: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2026-10-16 22:07:21 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
+2026-10-16 22:07:21 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
+2026-10-16 22:07:21 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
+2026-10-16 22:07:22 +00:00: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2026-10-16 22:07:22 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
+2026-10-16 22:07:22 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
+2026-10-16 22:07:22 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
+2026-10-16 22:07:25 +00:00: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2026-10-16 22:07:25 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
+2026-10-16 22:07:25 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
+2026-10-16 22:07:25 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
+2026-10-16 22:07:26 +00:00: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2026-10-16 22:07:26 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
+2026-10-16 22:07:26 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
+2026-10-16 22:07:26 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
+2026-10-16 22:07:28 +00:00: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2026-10-16 22:07:28 +00:00:     at setupFsCheck (/root/workspace/node_modules/next/dist/server/lib/router-utils/filesystem.js:151:19)
+2026-10-16 22:07:28 +00:00:     at async initialize (/root/workspace/node_modules/next/dist/server/lib/router-server.js:64:23)
+2026-10-16 22:07:28 +00:00:     at async Server.<anonymous> (/root/workspace/node_modules/next/dist/server/lib/start-server.js:249:36)
