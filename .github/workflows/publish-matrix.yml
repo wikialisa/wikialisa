@@ -1,0 +1,160 @@
+name: Publish Matrix
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Trigger:
+#   • Tự động: push tag v* (ví dụ: git tag v1.2.0 && git push origin v1.2.0)
+#   • Thủ công: workflow_dispatch với tuỳ chọn dry-run
+# ─────────────────────────────────────────────────────────────────────────────
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry-run (không upload lên npm)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      package_filter:
+        description: "Chỉ publish 1 package (để trống = publish tất cả)"
+        required: false
+        default: ""
+
+concurrency:
+  group: publish-matrix-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: "22.14.0"
+  PNPM_VERSION: "9.15.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Job 1: Detect — tìm packages nào thực sự thay đổi so với tag trước
+# ─────────────────────────────────────────────────────────────────────────────
+jobs:
+  detect:
+    name: 🔍 Detect changed packages
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.build-matrix.outputs.matrix }}
+      has_packages: ${{ steps.build-matrix.outputs.has_packages }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # cần full history để diff với tag trước
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install root deps (scripts only)
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build matrix of changed packages
+        id: build-matrix
+        env:
+          PACKAGE_FILTER: ${{ github.event.inputs.package_filter }}
+        run: node deploy/npm/scripts/detect-changed.mjs
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Job 2: Publish — chạy song song cho từng package trong matrix
+# ─────────────────────────────────────────────────────────────────────────────
+  publish:
+    name: 📦 Publish ${{ matrix.package.name }}
+    needs: detect
+    if: needs.detect.outputs.has_packages == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write             # npm provenance
+
+    strategy:
+      fail-fast: false            # 1 package lỗi không chặn các package khác
+      matrix:
+        package: ${{ fromJson(needs.detect.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # Restore Turborepo cache để build nhanh hơn
+      - name: Restore Turbo cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ matrix.package.dir }}-${{ github.sha }}
+          restore-keys: turbo-${{ matrix.package.dir }}-
+
+      - name: Build ${{ matrix.package.name }}
+        run: pnpm turbo run build --filter="${{ matrix.package.name }}" --cache-dir=.turbo
+
+      - name: Test ${{ matrix.package.name }}
+        run: pnpm turbo run test --filter="${{ matrix.package.name }}" --cache-dir=.turbo
+        env:
+          NODE_ENV: test
+        # Bỏ qua nếu không có test
+        continue-on-error: false
+
+      - name: Publish to npmjs.com
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: npm publish ${{ matrix.package.dir }} --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Dry-run publish (simulate)
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: npm publish ${{ matrix.package.dir }} --access public --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Job 3: Summary — báo cáo kết quả sau khi tất cả jobs xong
+# ─────────────────────────────────────────────────────────────────────────────
+  summary:
+    name: 📊 Publish summary
+    needs: [detect, publish]
+    if: always() && needs.detect.outputs.has_packages == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report
+        run: |
+          echo "## 📦 Publish Matrix Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Package | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo '${{ needs.detect.outputs.matrix }}' | \
+            node -e "
+              const lines = [];
+              let d = '';
+              process.stdin.on('data', c => d += c);
+              process.stdin.on('end', () => {
+                const pkgs = JSON.parse(d);
+                pkgs.forEach(p => {
+                  const status = '${{ needs.publish.result }}' === 'success' ? '✅ published' : '❌ failed';
+                  lines.push('| \`' + p.name + '\` | ' + status + ' |');
+                });
+                console.log(lines.join('\n'));
+              });
+            " >> $GITHUB_STEP_SUMMARY
