@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { readFile, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 
 /** PEM certificate + private key pair loaded from disk */
 export interface CertificateBundle {
