@@ -59,42 +59,76 @@ flowchart LR
 ## 📂 CẤU TRÚC DỰ ÁN
 
 ```text
-wikialisa/
+wikialisa/                         # GỐC CHỦ QUYỀN TỐI THƯỢNG (/wikialisa)
 ├── README.md                    # Tài liệu tổng quan dự án (Tệp này)
 ├── WIKIALISA_CORE_IDEA.md       # Hiến pháp & Ý tưởng thiết kế lõi Wikialisa & AXQ Silicon
 ├── CONTRIBUTING.md               # Hướng dẫn đóng góp dành cho cộng đồng mã nguồn mở
 ├── MEMBERS.md                   # Sổ tay thành viên nòng cốt & định chế quản trị nội bộ
 ├── AGENT.md                     # Chỉ thị vận hành & phân quyền tác nhân AI Agent
-├── docs/                        # Hệ thống tài liệu kiến trúc chuyên sâu (25 chuyên đề)
+├── bin/                         # Phân hệ lệnh chủ quyền axq (CLI Engine cho Windows/Linux)
+│   ├── axq                      # Bộ thực thi shell script cho POSIX (/usr/local/bin/axq)
+│   ├── axq.cmd                  # Trình bao bọc CMD cho Windows
+│   └── axq.ps1                  # Bộ động cơ PowerShell gốc hỗ trợ Mining, Wallet, Subsystem
+├── docs/                        # Hệ thống tài liệu kiến trúc chuyên sâu (26 chuyên đề)
 │   ├── README.md                # Bản đồ lộ trình tiến hóa phần cứng AXQ
-│   ├── 00-overview/             # Khởi nguyên clone, ma trận kỹ thuật & định chế thương hiệu
+│   ├── 00-overview/             # Khởi nguyên clone, ma trận, brand, GUI & Sovereign Mount
+│   │   ├── 03-roles-skills-and-brand-governance.md
+│   │   ├── 04-wikialisa-gui-architecture-and-roadmap.md
+│   │   └── 05-sovereign-namespace-and-mount-architecture.md
 │   ├── 01-baseline-and-kernel/  # Phân tích hiện trạng, Linux Driver & Hardware PoK
 │   ├── 02-baremetal-and-microkernel/ # Vi nhân Rust, Vùng nhớ Enclave, Zero-Copy XDP
 │   ├── 03-fpga-ip-cores/        # Đặc tả RTL, Mật mã học phần cứng & PoK Engine
 │   ├── 04-silicon-isa-core/     # Tập lệnh RISC-V AXQ-V, Vi kiến trúc AXQ-1, NPU AI Agent
 │   ├── 05-post-quantum-and-future/ # Kháng lượng tử NIST PQC & Tầm nhìn Quang tử
 │   └── 06-execution-roadmap/    # Lộ trình theo năm, Chuẩn EDA & Đồng thiết kế HW/SW
+├── etc/                         # Cấu hình chính sách & quyền hạn Zero-Trust
+│   └── capabilities.conf        # Phân tách đặc quyền POSIX capabilities
+├── include/                     # Tiêu đề C/C++ & Định nghĩa thương hiệu phần cứng
+│   └── wikialisa/brand.h        # Khung định nghĩa Brand Specs & Hằng số Kiến trúc
 ├── scripts/
-│   └── bootstrap.sh             # Script tự động hóa kiểm tra môi trường và clone/setup
-└── src/
-    ├── kernel/                  # Mã nguồn Driver Linux Phase 1 (/drivers/crypto/axq)
-    │   └── axq/                 # axq_main.c, axq_pok.c, axq.h, Makefile, Kconfig
-    ├── hardware/                # Thiết kế mạch bán dẫn Phase 3 & 4 (SystemVerilog RTL)
-    │   └── rtl/                 # axq_pok_engine.sv, sha256_round_stage.sv, TRNG
-    └── hal/                     # Lớp trừu tượng phần cứng (Hardware Abstraction Layer)
-        └── axq_hal.c            # Tự động nhận diện Software / Driver / FPGA / Silicon
+│   ├── bootstrap.sh             # Script tự động hóa kiểm tra môi trường và clone/setup
+│   └── setup_sovereign_mount.sh # Script tự động thiết lập gốc /wikialisa & bind /wikialisa/mnt/w
+├── src/
+│   ├── kernel/                  # Mã nguồn Driver Linux Phase 1 (/drivers/crypto/axq)
+│   │   └── axq/                 # axq_main.c, axq_pok.c, axq.h, Makefile, Kconfig
+│   ├── hardware/                # Thiết kế mạch bán dẫn Phase 3 & 4 (SystemVerilog RTL)
+│   │   └── rtl/                 # axq_pok_engine.sv, sha256_round_stage.sv, TRNG
+│   └── hal/                     # Lớp trừu tượng phần cứng (Hardware Abstraction Layer)
+│       └── axq_hal.c            # Tự động nhận diện Software / Driver / FPGA / Silicon
+└── mnt/
+    └── w/                       # Điểm gắn kết ổ đĩa vật lý W: [wikialisa-linux]
 ```
 
 ---
 
 ## 🚀 HƯỚNG DẪN BẮT ĐẦU NHANH
 
-### 1. Tra cứu Tài liệu Kiến trúc
+### 1. Sử dụng Phân hệ Lệnh Chủ quyền `axq`
+Lệnh `axq` đóng vai trò trung tâm điều khiển tối thượng cho Wikialisa (tương tự `wsl` của Linux):
+```bash
+# Kiểm tra toàn bộ trạng thái hạ tầng, ổ đĩa W: và mã nguồn
+axq status
+
+# Khởi chạy giao diện tương tác tức thì Wikialisa Sovereign Shell
+axq
+
+# Đào khối Proof-of-Kernel (PoK) thử nghiệm
+axq mine 0000
+
+# Quản lý ví mật mã AES-256
+axq wallet balance
+
+# Kiểm tra sức khỏe ổ đĩa W: [wikialisa-linux]
+axq drive
+```
+
+### 2. Tra cứu Tài liệu Kiến trúc
 - Bắt đầu với lộ trình tổng thể tại [docs/README.md](docs/README.md).
 - Xem quy trình khởi nguyên tại [docs/00-overview/00-genesis-source-clone.md](docs/00-overview/00-genesis-source-clone.md).
+- Kiến trúc không gian chủ quyền và gắn kết đảo ngược tại [docs/00-overview/05-sovereign-namespace-and-mount-architecture.md](docs/00-overview/05-sovereign-namespace-and-mount-architecture.md).
 - Khám phá tập lệnh vi xử lý tại [docs/04-silicon-isa-core/01-axq-v-isa-extension.md](docs/04-silicon-isa-core/01-axq-v-isa-extension.md).
 
-### 2. Biên dịch Driver Kernel Thử nghiệm (Phase 1)
+### 3. Biên dịch Driver Kernel Thử nghiệm (Phase 1)
 ```bash
 cd src/kernel/axq
 make
