@@ -81,7 +81,9 @@ docs/
 ├── 00-overview/                                 # Khởi nguyên & Tổng quan chiến lược
 │   ├── 00-genesis-source-clone.md               # Quy trình clone wikialisa/linux và thiết lập lõi ban đầu
 │   ├── 01-executive-summary.md                  # Tóm lược chiến lược & Định vị sản phẩm phần cứng
-│   └── 02-evolutionary-matrix.md                # Ma trận kỹ thuật chi tiết qua các kỷ nguyên L0 - L5
+│   ├── 02-evolutionary-matrix.md                # Ma trận kỹ thuật chi tiết qua các kỷ nguyên L0 - L5
+│   ├── 03-roles-skills-and-brand-governance.md  # Định chế vai trò kỹ năng & Phân quyền thương hiệu lõi
+│   └── 04-wikialisa-gui-architecture-and-roadmap.md # Kế hoạch kiến trúc giao diện đồ họa (Web & Desktop)
 ├── 01-baseline-and-kernel/                      # Kỷ nguyên 1: Đưa AXQ vào nhân Linux Kernel
 │   ├── 01-current-baseline-analysis.md          # Phân tích hiện trạng DOCS.MD (axq-master & điểm nghẽn)
 │   ├── 02-linux-kernel-subsystem.md             # Thiết kế Driver /drivers/crypto/axq và Syscalls

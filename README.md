@@ -61,10 +61,13 @@ flowchart LR
 ```text
 wikialisa/
 ├── README.md                    # Tài liệu tổng quan dự án (Tệp này)
-├── WIKIALISA_CORE_IDEA.md       # Hiến pháp & Ý tưởng thiết kế lõi Wikialisa (Hợp nhất từ DOCS & doc)
-├── docs/                        # Hệ thống tài liệu kiến trúc phần cứng chuyên sâu (24 chuyên đề)
+├── WIKIALISA_CORE_IDEA.md       # Hiến pháp & Ý tưởng thiết kế lõi Wikialisa & AXQ Silicon
+├── CONTRIBUTING.md               # Hướng dẫn đóng góp dành cho cộng đồng mã nguồn mở
+├── MEMBERS.md                   # Sổ tay thành viên nòng cốt & định chế quản trị nội bộ
+├── AGENT.md                     # Chỉ thị vận hành & phân quyền tác nhân AI Agent
+├── docs/                        # Hệ thống tài liệu kiến trúc chuyên sâu (25 chuyên đề)
 │   ├── README.md                # Bản đồ lộ trình tiến hóa phần cứng AXQ
-│   ├── 00-overview/             # Khởi nguyên clone mã nguồn & Ma trận kỹ thuật
+│   ├── 00-overview/             # Khởi nguyên clone, ma trận kỹ thuật & định chế thương hiệu
 │   ├── 01-baseline-and-kernel/  # Phân tích hiện trạng, Linux Driver & Hardware PoK
 │   ├── 02-baremetal-and-microkernel/ # Vi nhân Rust, Vùng nhớ Enclave, Zero-Copy XDP
 │   ├── 03-fpga-ip-cores/        # Đặc tả RTL, Mật mã học phần cứng & PoK Engine
@@ -106,6 +109,11 @@ verilator --cc axq_pok_engine.sv --exe ../testbench/tb_pok.cpp
 make -C obj_dir -f Vaxq_pok_engine.mk
 ./obj_dir/Vaxq_pok_engine
 ```
+
+### 4. Tham Gia Cộng Đồng & Đóng Góp
+- Xem quy chuẩn đóng góp mã nguồn tại [CONTRIBUTING.md](CONTRIBUTING.md).
+- Tra cứu sổ tay thành viên nòng cốt và định chế quản trị tại [MEMBERS.md](MEMBERS.md).
+- Xem chỉ thị vận hành dành cho tác nhân AI tại [AGENT.md](AGENT.md).
 
 ---
 *Phát triển bởi Đội ngũ Kỹ sư Hệ thống Wikialisa Core & AXQ Hardware Architecture Group.*
