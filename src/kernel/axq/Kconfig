@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# AXQ Blockchain Subsystem Configuration
+#
+
+menuconfig CRYPTO_AXQ
+	tristate "AXQ Blockchain Hardware Acceleration Subsystem"
+	dependsTo CRYPTO
+	select CRYPTO_SHA256
+	help
+	  Kích hoạt module nhân cho mạng lưới AXQ Chain (Wikialisa Core).
+	  Hỗ trợ cơ chế đồng thuận Proof-of-Kernel (PoK) dựa trên các tín hiệu
+	  vật lý thời gian thực từ CPU (RDTSC, CPU Jitter, bộ đếm hiệu năng PMU).
+
+	  Nếu biên dịch dưới dạng module, tệp nhị phân sẽ là axq.ko.
+
+config CRYPTO_AXQ_HW_FPGA
+	bool "Hỗ trợ Card Tăng tốc Mật mã FPGA qua PCIe"
+	depends on CRYPTO_AXQ && PCI
+	default y
+	help
+	  Tự động nhận diện và nạp các luồng dữ liệu sang card FPGA (như AMD/Xilinx
+	  Alveo PCIe) để đạt tốc độ băm hàng trăm triệu Hash/giây.
+
+config CRYPTO_AXQ_SILICON_PUF
+	bool "Kích hoạt Buồng Khóa Bảo Mật Silicon PUF Vault"
+	depends on CRYPTO_AXQ
+	default y
+	help
+	  Tận dụng phần cứng gốc tin cậy SRAM PUF trên chip RISC-V AXQ-V để
+	  bảo vệ tuyệt đối khóa riêng tư khỏi mọi nguy cơ trích xuất bộ nhớ.
