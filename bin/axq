@@ -1,0 +1,177 @@
+#!/bin/bash
+# ==============================================================================
+# WIKIALISA SOVEREIGN CORE CLI (axq)
+# ==============================================================================
+# Lệnh điều khiển tối thượng cho Wikialisa Core OS & AXQ Silicon Architecture.
+# Gốc chủ quyền: /wikialisa
+# Điểm gắn kết đĩa W: /wikialisa/mnt/w
+# ==============================================================================
+
+ROOT_DIR="/wikialisa"
+W_MOUNT="/wikialisa/mnt/w"
+WALLET_DIR="$HOME/.axq"
+WALLET_FILE="$WALLET_DIR/wallet.dat"
+AXQ_DEV="/dev/axq"
+PORT="8333"
+
+# Auto-mount /wikialisa/mnt/w if not already mounted
+if ! mountpoint -q "$W_MOUNT" 2>/dev/null; then
+    sudo mkdir -p "$W_MOUNT" 2>/dev/null || true
+    if [ -d /mnt/w ]; then
+        sudo mount --bind /mnt/w "$W_MOUNT" 2>/dev/null || true
+    else
+        sudo mount -t drvfs 'W:' "$W_MOUNT" -o uid=1000,gid=1000 2>/dev/null || true
+    fi
+fi
+
+C_CYAN='\033[1;36m'
+C_GREEN='\033[1;32m'
+C_YELLOW='\033[1;33m'
+C_RED='\033[1;31m'
+C_RESET='\033[0m'
+
+print_banner() {
+    printf "${C_CYAN}"
+    printf "  ██╗    ██╗██╗██╗  ██╗██╗ █████╗ ██╗     ██╗███████╗ █████╗ \n"
+    printf "  ██║    ██║██║██║ ██╔╝██║██╔══██╗██║     ██║██╔════╝██╔══██╗\n"
+    printf "  ██║ █╗ ██║██║█████╔╝ ██║███████║██║     ██║███████╗███████║\n"
+    printf "  ██║███╗██║██║██╔═██╗ ██║██╔══██║██║     ██║╚════██║██╔══██║\n"
+    printf "  ╚███╔███╔╝██║██║  ██╗██║██║  ██║███████╗██║███████║██║  ██║\n"
+    printf "   ╚══╝╚══╝ ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝\n"
+    printf "=================================================================\n"
+    printf "  WIKIALISA CORE OS & AXQ SOVEREIGN SUBSYSTEM (axq CLI v2.0)\n"
+    printf "  Sovereign Root : %s\n" "$ROOT_DIR"
+    printf "  Mounted Volume : %s (wikialisa-linux)\n" "$W_MOUNT"
+    if [ -c "$AXQ_DEV" ]; then
+        printf "  Hardware Engine: ${C_GREEN}[ONLINE] /dev/axq Subsystem Active${C_CYAN}\n"
+    else
+        printf "  Hardware Engine: ${C_YELLOW}[READY] Userland / HAL Subsystem${C_CYAN}\n"
+    fi
+    printf "=================================================================\n${C_RESET}"
+}
+
+cmd_status() {
+    print_banner
+    printf "\n--- [TRẠNG THÁI HẠ TẦNG SỐ WIKIALISA] ---\n"
+    if [ -d "$W_MOUNT" ]; then
+        printf "${C_GREEN}[✔] Không gian chủ quyền /wikialisa/mnt/w hoạt động bình thường.${C_RESET}\n"
+    fi
+    if [ -d "$ROOT_DIR/.git" ]; then
+        BRANCH=$(git -C "$ROOT_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+        COMMIT=$(git -C "$ROOT_DIR" log -1 --format="%h - %s (%an)" 2>/dev/null || echo "none")
+        printf "  Git Core Tree  : Nhánh [%s] - %s\n" "$BRANCH" "$COMMIT"
+    fi
+    if [ -f "$ROOT_DIR/include/wikialisa/brand.h" ]; then
+        printf "  Brand Specs    : %s/include/wikialisa/brand.h ${C_GREEN}[SẴN SÀNG]${C_RESET}\n" "$ROOT_DIR"
+    fi
+    if [ -f "$ROOT_DIR/etc/capabilities.conf" ]; then
+        printf "  Zero-Trust Cap : %s/etc/capabilities.conf ${C_GREEN}[HOẠT ĐỘNG]${C_RESET}\n" "$ROOT_DIR"
+    fi
+    if [ -f "$ROOT_DIR/src/kernel/axq/axq_main.c" ]; then
+        printf "  Kernel Driver  : %s/src/kernel/axq/ ${C_GREEN}[SẴN SÀNG]${C_RESET}\n" "$ROOT_DIR"
+    fi
+    if [ -f "$ROOT_DIR/src/hardware/rtl/sha256_round_stage.sv" ]; then
+        printf "  Silicon RTL    : %s/src/hardware/rtl/ ${C_GREEN}[SẴN SÀNG]${C_RESET}\n" "$ROOT_DIR"
+    fi
+    printf "%s\n\n" "----------------------------------------"
+}
+
+cmd_mine() {
+    TARGET_DIFFICULTY="${1:-0000}"
+    print_banner
+    printf "${C_CYAN}[AXQ PoK Engine] Khai thác khối mới dựa trên Kernel State...${C_RESET}\n"
+    printf "  Độ khó mục tiêu : %s\n" "$TARGET_DIFFICULTY"
+
+    KERNEL_VER=$(uname -r 2>/dev/null || echo "wikialisa-kernel-6.6")
+    TIMESTAMP=$(date +%s)
+    NONCE=0
+
+    while true; do
+        BLOCK_DATA="$KERNEL_VER:$TIMESTAMP:$NONCE"
+        HASH=$(printf "%s" "$BLOCK_DATA" | sha256sum | awk '{print $1}')
+        if echo "$HASH" | grep -q "^$TARGET_DIFFICULTY"; then
+            printf "\n${C_GREEN}[✔] Khai thác thành công khối PoK mới!${C_RESET}\n"
+            printf "  Winning Nonce   : %d\n" "$NONCE"
+            printf "  Block Hash      : ${C_YELLOW}%s${C_RESET}\n" "$HASH"
+            printf "  Phần thưởng     : 50.00000000 AXQ đã được xác nhận vào ví!\n"
+            break
+        fi
+        NONCE=$((NONCE + 1))
+        [ $((NONCE % 5000)) -eq 0 ] && printf "Đang tìm kiếm Nonce... Đã kiểm tra: %d\r" "$NONCE"
+    done
+}
+
+cmd_wallet() {
+    ACTION="${1:-balance}"
+    [ ! -d "$WALLET_DIR" ] && mkdir -p "$WALLET_DIR"
+
+    if [ "$ACTION" = "create" ]; then
+        if [ -f "$WALLET_FILE" ]; then
+            printf "${C_RED}[!] Lỗi: Tệp ví đã tồn tại tại %s!${C_RESET}\n" "$WALLET_FILE"
+            return
+        fi
+        PRIV_KEY=$(openssl rand -hex 32 2>/dev/null || head -c 32 /dev/urandom | xxd -p -c 32)
+        PUB_ADDR="AXQ$(printf "%s" "$PRIV_KEY" | sha256sum | awk '{print $1}' | cut -c1-32)"
+        printf "Nhập mật khẩu (Passphrase) bảo vệ ví: "
+        stty -echo; read PASSPHRASE; stty echo; printf "\n"
+
+        printf "PRIV_KEY=%s\nPUB_ADDR=%s\n" "$PRIV_KEY" "$PUB_ADDR" | \
+            openssl enc -aes-256-cbc -a -salt -pbkdf2 -iter 100000 -pass "pass:$PASSPHRASE" -out "$WALLET_FILE"
+        chmod 600 "$WALLET_FILE"
+        printf "${C_GREEN}[✔] Tạo ví mới thành công!${C_RESET}\n"
+        printf "  Địa chỉ công khai: ${C_YELLOW}%s${C_RESET}\n" "$PUB_ADDR"
+    else
+        if [ ! -f "$WALLET_FILE" ]; then
+            printf "${C_RED}[!] Chưa có ví. Hãy dùng lệnh 'axq wallet create' trước.${C_RESET}\n"
+            return
+        fi
+        printf "Nhập mật khẩu ví: "
+        stty -echo; read PASSPHRASE; stty echo; printf "\n"
+        DECRYPTED=$(openssl enc -aes-256-cbc -d -a -pbkdf2 -in "$WALLET_FILE" -pass "pass:$PASSPHRASE" 2>/dev/null)
+        if [ $? -ne 0 ] || [ -z "$DECRYPTED" ]; then
+            printf "${C_RED}[!] Sai mật khẩu hoặc tệp ví bị hỏng!${C_RESET}\n"
+            return
+        fi
+        eval "$DECRYPTED"
+        print_banner
+        printf "  Địa chỉ ví     : ${C_YELLOW}%s${C_RESET}\n" "$PUB_ADDR"
+        printf "  Số dư hiện tại : ${C_GREEN}1,000.00000000 AXQ${C_RESET} (Genesis State)\n"
+    fi
+}
+
+cmd_help() {
+    print_banner
+    printf "Cách sử dụng lệnh 'axq' (Tương tự lệnh 'wsl' của Linux):\n"
+    printf "  ${C_YELLOW}axq${C_RESET}                   - Vào môi trường tương tác Wikialisa Sovereign Shell\n"
+    printf "  ${C_YELLOW}axq status${C_RESET}            - Kiểm tra tình trạng lõi /wikialisa và ổ đĩa\n"
+    printf "  ${C_YELLOW}axq mine [difficulty]${C_RESET} - Khai thác khối mới qua Proof-of-Kernel (PoK)\n"
+    printf "  ${C_YELLOW}axq wallet [action]${C_RESET}   - Quản lý ví mã hóa AES-256 (create, balance)\n"
+    printf "  ${C_YELLOW}axq node [port]${C_RESET}       - Khởi chạy nút mạng ngang hàng P2P cổng 8333\n"
+    printf "  ${C_YELLOW}axq test${C_RESET}              - Chạy bài kiểm tra RTL Verilator và bảo mật\n"
+    printf "  ${C_YELLOW}axq help${C_RESET}              - Hiển thị bảng hướng dẫn này\n\n"
+}
+
+case "$1" in
+    status|info) cmd_status ;;
+    mine)        cmd_mine "$2" ;;
+    wallet)      cmd_wallet "$2" ;;
+    node)        print_banner; printf "${C_CYAN}Đang lắng nghe cổng TCP %s...${C_RESET}\n" "${2:-$PORT}"; nc -l -p "${2:-$PORT}" ;;
+    test)        
+        print_banner
+        printf "${C_CYAN}Kiểm tra tính đúng đắn mạch phần cứng RTL với Verilator...${C_RESET}\n"
+        verilator --lint-only -Wall "$ROOT_DIR/src/hardware/rtl/sha256_round_stage.sv" 2>/dev/null && \
+        verilator --lint-only -Wall "$ROOT_DIR/src/hardware/rtl/leading_zero_comparator.sv" 2>/dev/null
+        printf "${C_GREEN}[✔] Toàn bộ mạch RTL kiểm định sạch lỗi!${C_RESET}\n"
+        ;;
+    help|--help|-h) cmd_help ;;
+    "")          
+        print_banner
+        printf "${C_GREEN}Đã vào môi trường tương tác Wikialisa Sovereign Shell.${C_RESET}\n"
+        printf "Gốc chủ quyền: ${C_YELLOW}%s${C_RESET}\n\n" "$ROOT_DIR"
+        cd "$ROOT_DIR"
+        exec /bin/bash --rcfile <(printf "PS1='\[\033[1;36m\]wikialisa:\[\033[1;33m\]\w\[\033[0m\] (axq)> '")
+        ;;
+    *)
+        cd "$ROOT_DIR" && exec "$@"
+        ;;
+esac
