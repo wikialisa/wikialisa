@@ -83,7 +83,10 @@ docs/
 │   ├── 01-executive-summary.md                  # Tóm lược chiến lược & Định vị sản phẩm phần cứng
 │   ├── 02-evolutionary-matrix.md                # Ma trận kỹ thuật chi tiết qua các kỷ nguyên L0 - L5
 │   ├── 03-roles-skills-and-brand-governance.md  # Định chế vai trò kỹ năng & Phân quyền thương hiệu lõi
-│   └── 04-wikialisa-gui-architecture-and-roadmap.md # Kế hoạch kiến trúc giao diện đồ họa (Web & Desktop)
+│   ├── 04-wikialisa-gui-architecture-and-roadmap.md # Kế hoạch kiến trúc giao diện đồ họa (Web & Desktop)
+│   ├── 05-sovereign-namespace-and-mount-architecture.md # Không gian chủ quyền /wikialisa & Phân hệ axq
+│   ├── 06-runner-images-and-accessibility-agents-integration.md # Hợp nhất Runner Images & WCAG 2.2 AA
+│   └── 08-global-financial-network-and-tokenomics.md # Hệ thống tài chính toàn cầu & Luân chuyển Tokenomics
 ├── 01-baseline-and-kernel/                      # Kỷ nguyên 1: Đưa AXQ vào nhân Linux Kernel
 │   ├── 01-current-baseline-analysis.md          # Phân tích hiện trạng WIKIALISA_CORE_IDEA.md (axq-master & điểm nghẽn)
 │   ├── 02-linux-kernel-subsystem.md             # Thiết kế Driver /drivers/crypto/axq và Syscalls

@@ -71,11 +71,12 @@ wikialisa/                         # GỐC CHỦ QUYỀN TỐI THƯỢNG (/wikia
 │   └── axq.ps1                  # Bộ động cơ PowerShell gốc hỗ trợ Mining, Wallet, Subsystem
 ├── docs/                        # Hệ thống tài liệu kiến trúc chuyên sâu (27 chuyên đề)
 │   ├── README.md                # Bản đồ lộ trình tiến hóa phần cứng AXQ
-│   ├── 00-overview/             # Khởi nguyên clone, ma trận, brand, GUI, mount & runners
+│   ├── 00-overview/             # Khởi nguyên clone, ma trận, brand, GUI, mount, CI & Tokenomics
 │   │   ├── 03-roles-skills-and-brand-governance.md
 │   │   ├── 04-wikialisa-gui-architecture-and-roadmap.md
 │   │   ├── 05-sovereign-namespace-and-mount-architecture.md
-│   │   └── 06-runner-images-and-accessibility-agents-integration.md
+│   │   ├── 06-runner-images-and-accessibility-agents-integration.md
+│   │   └── 08-global-financial-network-and-tokenomics.md
 │   ├── 01-baseline-and-kernel/  # Phân tích hiện trạng, Linux Driver & Hardware PoK
 │   │   └── 04-linux-kernel-and-ai-assistant-guidelines.md
 │   ├── 02-baremetal-and-microkernel/ # Vi nhân Rust, Vùng nhớ Enclave, Zero-Copy XDP
