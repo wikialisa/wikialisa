@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # WIKIALISA SOVEREIGN SUBSYSTEM & AXQ CORE ENGINE (axq CLI)
 # ==============================================================================
 # The Sovereign Subsystem Command for Wikialisa Core OS & AXQ Silicon Architecture.
