@@ -40,7 +40,7 @@ Chuyển hóa toàn bộ thuật toán SHA-256, Keccak-256, Poseidon (hàm băm 
 Tích hợp tế bào vi mạch vật lý không thể sao chép (SRAM PUF - Physically Unclonable Function). Khóa bảo mật của mạng lưới AXQ không bao giờ lưu trữ tĩnh trong bộ nhớ mà được tái tạo động từ các đặc tính lượng tử/vật lý của chính phiến silicon. Không một kỹ thuật phần mềm hay can thiệp vật lý nào có thể trích xuất được khóa riêng tư.
 
 ### Trụ cột 3: Nhân Xử lý Thần kinh cho AI Agent (On-chip NPU for Agent Chain)
-Trong `DOCS.MD`, "AI Agent Chain" đóng vai trò khởi tạo và điều phối node. Khi tiến hóa lên phần cứng, một nhân vi xử lý thần kinh (NPU - Neural Processing Unit) nhỏ gọn dạng Systolic Array được tích hợp song song với pipeline của CPU. AI Agent có thể chạy mô hình ngôn ngữ/suy luận định lượng (Quantized SLM) độc lập để tự động xác minh giao dịch, điều chỉnh độ khó khai thác và bảo vệ mạng lưới theo thời gian thực mà không phụ thuộc vào máy chủ ngoài.
+Trong `WIKIALISA_CORE_IDEA.md`, "AI Agent Chain" đóng vai trò khởi tạo và điều phối node. Khi tiến hóa lên phần cứng, một nhân vi xử lý thần kinh (NPU - Neural Processing Unit) nhỏ gọn dạng Systolic Array được tích hợp song song với pipeline của CPU. AI Agent có thể chạy mô hình ngôn ngữ/suy luận định lượng (Quantized SLM) độc lập để tự động xác minh giao dịch, điều chỉnh độ khó khai thác và bảo vệ mạng lưới theo thời gian thực mà không phụ thuộc vào máy chủ ngoài.
 
 ---
 

@@ -8,7 +8,7 @@
 Một nhân phần cứng dù mạnh mẽ và tối tân đến đâu cũng sẽ trở nên vô dụng nếu các nhà phát triển phần mềm không thể tiếp cận và sử dụng nó một cách dễ dàng.
 
 Nguyên tắc đồng thiết kế trong dự án Wikialisa:
-> **"Mọi cải tiến ở tầng bán dẫn phải được ánh xạ trực tiếp và liền mạch lên tầng ứng dụng, đảm bảo tính tương thích ngược 100% với các công cụ dòng lệnh đã định hình trong `DOCS.MD`."**
+> **"Mọi cải tiến ở tầng bán dẫn phải được ánh xạ trực tiếp và liền mạch lên tầng ứng dụng, đảm bảo tính tương thích ngược 100% với các công cụ dòng lệnh đã định hình trong `WIKIALISA_CORE_IDEA.md`."**
 
 ```
 +-------------------------------------------------------------+
@@ -46,7 +46,7 @@ Lớp HAL (`axq_hal.c`) tự động kiểm tra năng lực phần cứng tại 
 #include <unistd.h>
 
 typedef enum {
-    ACCEL_MODE_SOFTWARE_FALLBACK = 0, // Dùng CPU và OpenSSL như trong DOCS.MD
+    ACCEL_MODE_SOFTWARE_FALLBACK = 0, // Dùng CPU và OpenSSL như trong WIKIALISA_CORE_IDEA.md
     ACCEL_MODE_KERNEL_DRIVER     = 1, // Kích hoạt qua /dev/axq
     ACCEL_MODE_FPGA_PCIE         = 2, // Kích hoạt qua card Alveo PCIe
     ACCEL_MODE_NATIVE_SILICON    = 3  // Chạy trên CPU bản địa RISC-V AXQ-V Core

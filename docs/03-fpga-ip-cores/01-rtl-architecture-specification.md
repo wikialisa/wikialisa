@@ -5,7 +5,7 @@
 
 ## 1. MỤC TIÊU CỦA GIAI ĐOẠN RTL (KỶ NGUYÊN 3)
 
-Trong [`DOCS.MD`](../../DOCS.MD), toàn bộ các tác vụ tính toán (băm SHA-256, ký ví AES/ECDSA, đồng thuận PoK) đều chạy bằng phần mềm tuần tự trên tập lệnh của CPU máy chủ.
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), toàn bộ các tác vụ tính toán (băm SHA-256, ký ví AES/ECDSA, đồng thuận PoK) đều chạy bằng phần mềm tuần tự trên tập lệnh của CPU máy chủ.
 
 Trong **Kỷ nguyên 3**, chúng ta chuyển hóa toàn bộ các thuật toán cốt lõi thành **mạch phần cứng số (Digital Logic Circuits)** được mô tả bằng ngôn ngữ phần cứng hiện đại (**SystemVerilog** và **Chisel HDL**). Mục tiêu là tạo ra một khối sở hữu trí tuệ phần cứng (**AXQ Hardware IP Core**) có thể nạp trực tiếp vào các dòng chip FPGA hiệu năng cao (như AMD/Xilinx UltraScale+, Kria SOM hoặc Alveo PCIe Accelerator) trước khi tiến hành tape-out đúc chip silicon.
 

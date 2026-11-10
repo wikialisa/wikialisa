@@ -66,7 +66,7 @@ sudo apt-get update && sudo apt-get install -y \
 
 ## 3. KHẮC SÂU ĐỊNH DANH THƯƠNG HIỆU: ĐỔI TÊN LÕI THÀNH `wikialisa`
 
-Dựa trên hướng dẫn từ [`DOCS.MD`](../../DOCS.MD), để hệ thống phản ánh đúng danh xưng hạt nhân độc quyền khi thực thi `uname -a` và xuất hiện trong nhật ký khởi động `dmesg`, chúng ta thực hiện điều chỉnh trực tiếp trên mã nguồn C của nhân:
+Dựa trên hướng dẫn từ [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), để hệ thống phản ánh đúng danh xưng hạt nhân độc quyền khi thực thi `uname -a` và xuất hiện trong nhật ký khởi động `dmesg`, chúng ta thực hiện điều chỉnh trực tiếp trên mã nguồn C của nhân:
 
 ### 3.1. Đổi tên hệ điều hành gốc (`UTS_SYSNAME`)
 Mở tệp `include/linux/uts.h` (hoặc cấu hình thông qua compile-time flags) để thay thế `Linux` bằng `wikialisa`:

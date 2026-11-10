@@ -5,7 +5,7 @@
 
 ## 1. TỪ SCRIPT AI AGENT ĐẾN SILICON NPU
 
-Trong [`DOCS.MD`](../../DOCS.MD) (Mục *"Tác nhân AI Agent Chain: Khởi tạo Hash & AXQ Network"*), hệ sinh thái Wikialisa sử dụng một tác nhân AI Agent chạy bằng script phần mềm để thực hiện các công việc:
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md) (Mục *"Tác nhân AI Agent Chain: Khởi tạo Hash & AXQ Network"*), hệ sinh thái Wikialisa sử dụng một tác nhân AI Agent chạy bằng script phần mềm để thực hiện các công việc:
 - Tự động kiểm tra tính toàn vẹn của hệ điều hành và sinh mã băm Genesis Block.
 - Khởi tạo ví mạng lưới và điều hướng tham số dòng lệnh.
 - Giám sát trạng thái đồng bộ khối của node mạng P2P.

@@ -3,9 +3,9 @@
 
 ---
 
-## 1. NGUYÊN NHÂN NGHẼN MẠNG TRONG `DOCS.MD`
+## 1. NGUYÊN NHÂN NGHẼN MẠNG TRONG `WIKIALISA_CORE_IDEA.md`
 
-Trong [`DOCS.MD`](../../DOCS.MD), mạng ngang hàng P2P được mô phỏng bằng tiện ích dòng lệnh `nc` (Netcat) lắng nghe cổng TCP 8333:
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), mạng ngang hàng P2P được mô phỏng bằng tiện ích dòng lệnh `nc` (Netcat) lắng nghe cổng TCP 8333:
 ```bash
 echo -e "AXQ-PROTOCOL-V1-READY\n" | nc -l -p "$NODE_PORT" -q 1
 ```

@@ -1,11 +1,11 @@
-# 🔍 PHÂN TÍCH HIỆN TRẠNG TỪ DOCS.MD VÀ CÁC ĐIỂM NGHẼN KỸ THUẬT
+# 🔍 PHÂN TÍCH HIỆN TRẠNG TỪ WIKIALISA_CORE_IDEA.md VÀ CÁC ĐIỂM NGHẼN KỸ THUẬT
 ### *Baseline Analysis: From axq-master Bash Scripts to Physical Constraints*
 
 ---
 
-## 1. MÔ TẢ HIỆN TRẠNG TRONG `DOCS.MD`
+## 1. MÔ TẢ HIỆN TRẠNG TRONG `WIKIALISA_CORE_IDEA.md`
 
-Trong tài liệu [`DOCS.MD`](../../DOCS.MD), mã nguồn quản trị và thực thi mạng lưới AXQ Chain được tích hợp dưới dạng tập lệnh Bash `axq-master` nằm tại `/usr/bin/axq-master` (được đưa vào tệp `initrd.img` của hệ điều hành Wikialisa Core).
+Trong tài liệu [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), mã nguồn quản trị và thực thi mạng lưới AXQ Chain được tích hợp dưới dạng tập lệnh Bash `axq-master` nằm tại `/usr/bin/axq-master` (được đưa vào tệp `initrd.img` của hệ điều hành Wikialisa Core).
 
 ### Các module chức năng hiện tại:
 1. **Khởi tạo và Mã hóa Ví (`cmd_create`):**

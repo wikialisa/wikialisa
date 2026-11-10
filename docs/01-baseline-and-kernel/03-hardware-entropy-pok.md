@@ -5,7 +5,7 @@
 
 ## 1. NGUYÊN LÝ PROOF-OF-KERNEL PHẦN CỨNG
 
-Trong [`DOCS.MD`](../../DOCS.MD), thuật toán Proof-of-Kernel sơ khai sử dụng chuỗi tĩnh từ phần mềm:
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), thuật toán Proof-of-Kernel sơ khai sử dụng chuỗi tĩnh từ phần mềm:
 ```bash
 BLOCK_DATA="$KERNEL_VER:$TIMESTAMP:$NONCE"
 ```

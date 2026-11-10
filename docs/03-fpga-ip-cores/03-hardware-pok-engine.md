@@ -5,7 +5,7 @@
 
 ## 1. NGUYÊN LÝ THIẾT KẾ ĐƯỜNG ỐNG (PIPELINE ARCHITECTURE)
 
-Trong [`DOCS.MD`](../../DOCS.MD), thuật toán Proof-of-Kernel được thực thi thông qua vòng lặp Bash:
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), thuật toán Proof-of-Kernel được thực thi thông qua vòng lặp Bash:
 ```bash
 while true; do
     HASH=$(echo -n "$BLOCK_DATA" | sha256sum | awk '{print $1}')
@@ -117,5 +117,5 @@ endmodule
 
 - **Tần số xung nhịp:** 300 MHz trên Xilinx UltraScale+.
 - **Tốc độ khai thác khối PoK:** **300,000,000 Hashes/giây (300 MH/s)** trên một nhân phần cứng duy nhất.
-- So sánh: Nhanh hơn tập lệnh Bash gốc trong `DOCS.MD` **gấp 75,000 lần**, với mức tiêu thụ điện năng chỉ khoảng **3.5 Watts**.
+- So sánh: Nhanh hơn tập lệnh Bash gốc trong `WIKIALISA_CORE_IDEA.md` **gấp 75,000 lần**, với mức tiêu thụ điện năng chỉ khoảng **3.5 Watts**.
 

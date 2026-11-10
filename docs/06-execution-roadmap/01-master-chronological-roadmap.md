@@ -10,7 +10,7 @@ gantt
     title Lộ trình Phát triển Nhân Phần cứng AXQ Core
     dateFormat  YYYY-MM
     section Kỷ nguyên 1: Kernel Driver
-    Phân tích hiện trạng DOCS.MD           :done, 2026-11, 2026-12
+    Phân tích hiện trạng WIKIALISA_CORE_IDEA.md           :done, 2026-11, 2026-12
     C Driver /drivers/crypto/axq           :active, 2027-01, 2027-03
     Tích hợp Hardware Entropy PoK          :2027-02, 2027-04
     section Kỷ nguyên 2: Microkernel

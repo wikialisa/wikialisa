@@ -69,13 +69,15 @@ wikialisa/                         # GỐC CHỦ QUYỀN TỐI THƯỢNG (/wikia
 │   ├── axq                      # Bộ thực thi shell script cho POSIX (/usr/local/bin/axq)
 │   ├── axq.cmd                  # Trình bao bọc CMD cho Windows
 │   └── axq.ps1                  # Bộ động cơ PowerShell gốc hỗ trợ Mining, Wallet, Subsystem
-├── docs/                        # Hệ thống tài liệu kiến trúc chuyên sâu (26 chuyên đề)
+├── docs/                        # Hệ thống tài liệu kiến trúc chuyên sâu (27 chuyên đề)
 │   ├── README.md                # Bản đồ lộ trình tiến hóa phần cứng AXQ
-│   ├── 00-overview/             # Khởi nguyên clone, ma trận, brand, GUI & Sovereign Mount
+│   ├── 00-overview/             # Khởi nguyên clone, ma trận, brand, GUI, mount & runners
 │   │   ├── 03-roles-skills-and-brand-governance.md
 │   │   ├── 04-wikialisa-gui-architecture-and-roadmap.md
-│   │   └── 05-sovereign-namespace-and-mount-architecture.md
+│   │   ├── 05-sovereign-namespace-and-mount-architecture.md
+│   │   └── 06-runner-images-and-accessibility-agents-integration.md
 │   ├── 01-baseline-and-kernel/  # Phân tích hiện trạng, Linux Driver & Hardware PoK
+│   │   └── 04-linux-kernel-and-ai-assistant-guidelines.md
 │   ├── 02-baremetal-and-microkernel/ # Vi nhân Rust, Vùng nhớ Enclave, Zero-Copy XDP
 │   ├── 03-fpga-ip-cores/        # Đặc tả RTL, Mật mã học phần cứng & PoK Engine
 │   ├── 04-silicon-isa-core/     # Tập lệnh RISC-V AXQ-V, Vi kiến trúc AXQ-1, NPU AI Agent
@@ -85,6 +87,10 @@ wikialisa/                         # GỐC CHỦ QUYỀN TỐI THƯỢNG (/wikia
 │   └── capabilities.conf        # Phân tách đặc quyền POSIX capabilities
 ├── include/                     # Tiêu đề C/C++ & Định nghĩa thương hiệu phần cứng
 │   └── wikialisa/brand.h        # Khung định nghĩa Brand Specs & Hằng số Kiến trúc
+├── infra/
+│   └── runner-images/           # [SUBMODULE: wikialisalang/runner-images] Môi trường VM & Runner CI/CD
+├── plugins/
+│   └── accessibility-agents/    # [SUBMODULE: wikialisa/accessibility-agents] Vệ binh Trợ năng WCAG 2.2 AA
 ├── scripts/
 │   ├── bootstrap.sh             # Script tự động hóa kiểm tra môi trường và clone/setup
 │   └── setup_sovereign_mount.sh # Script tự động thiết lập gốc /wikialisa & bind /wikialisa/mnt/w
@@ -118,6 +124,12 @@ axq mine 0000
 # Quản lý ví mật mã AES-256
 axq wallet balance
 
+# Kiểm định chuẩn trợ năng WCAG 2.2 AA tự động
+axq a11y audit
+
+# Kiểm tra hạ tầng Runner Images tự lưu trữ
+axq runner status
+
 # Kiểm tra sức khỏe ổ đĩa W: [wikialisa-linux]
 axq drive
 ```
@@ -126,6 +138,8 @@ axq drive
 - Bắt đầu với lộ trình tổng thể tại [docs/README.md](docs/README.md).
 - Xem quy trình khởi nguyên tại [docs/00-overview/00-genesis-source-clone.md](docs/00-overview/00-genesis-source-clone.md).
 - Kiến trúc không gian chủ quyền và gắn kết đảo ngược tại [docs/00-overview/05-sovereign-namespace-and-mount-architecture.md](docs/00-overview/05-sovereign-namespace-and-mount-architecture.md).
+- Hợp nhất hạ tầng Runner Images & Vệ binh Trợ năng tại [docs/00-overview/06-runner-images-and-accessibility-agents-integration.md](docs/00-overview/06-runner-images-and-accessibility-agents-integration.md).
+- Chuẩn mực nhân Linux và AI Coding Assistant tại [docs/01-baseline-and-kernel/04-linux-kernel-and-ai-assistant-guidelines.md](docs/01-baseline-and-kernel/04-linux-kernel-and-ai-assistant-guidelines.md).
 - Khám phá tập lệnh vi xử lý tại [docs/04-silicon-isa-core/01-axq-v-isa-extension.md](docs/04-silicon-isa-core/01-axq-v-isa-extension.md).
 
 ### 3. Biên dịch Driver Kernel Thử nghiệm (Phase 1)

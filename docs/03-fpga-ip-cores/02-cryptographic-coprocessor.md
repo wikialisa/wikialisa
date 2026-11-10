@@ -84,7 +84,7 @@ endmodule
 
 ## 3. BỘ GIA TỐC HÀM BĂM POSEIDON (ZERO-KNOWLEDGE ACCELERATOR)
 
-Hàm băm Poseidon được sử dụng rộng rãi trong các hệ thống ZK-Rollup (Layer 2 trong `DOCS.MD`).
+Hàm băm Poseidon được sử dụng rộng rãi trong các hệ thống ZK-Rollup (Layer 2 trong `WIKIALISA_CORE_IDEA.md`).
 - **Phần cứng triển khai:** Mảng ma trận $3 \times 3$ và lũy thừa $S\text{-box}: x^5 \pmod p$.
 - **Đặc tính:** Chỉ mất **8 chu kỳ xung nhịp** để hoàn thành một phép băm Poseidon 256-bit trên FPGA (so với ~1,500 chu kỳ trên CPU x86_64).
 

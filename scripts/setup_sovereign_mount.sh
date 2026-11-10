@@ -26,7 +26,7 @@ fi
 # 3. Tạo các liên kết chủ quyền từ /wikialisa/mnt/w/wikialisa lên /wikialisa
 SOURCE_DIR="/wikialisa/mnt/w/wikialisa"
 
-ITEMS=(".git" "bin" "docs" "src" "include" "etc" "scripts" "README.md" "WIKIALISA_CORE_IDEA.md" "MEMBERS.md" "CONTRIBUTING.md" "AGENT.md")
+ITEMS=(".git" "bin" "docs" "src" "include" "etc" "scripts" "plugins" "infra" "README.md" "WIKIALISA_CORE_IDEA.md" "MEMBERS.md" "CONTRIBUTING.md" "AGENT.md")
 
 for item in "${ITEMS[@]}"; do
     if [ -e "$SOURCE_DIR/$item" ]; then

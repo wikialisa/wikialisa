@@ -5,7 +5,7 @@
 
 ## 1. MỤC TIÊU BẢO VỆ DỮ LIỆU CỐT LÕI
 
-Trong [`DOCS.MD`](../../DOCS.MD), tệp `wallet.dat` được bảo vệ bằng mã hóa AES-256 Passphrase. Tuy nhiên, khi người dùng nhập mật khẩu để kiểm tra số dư (`axq-master balance`) hoặc khai thác khối (`axq-master mine`), chuỗi khóa riêng tư (Private Key) bắt buộc phải được giải mã và lưu trữ trong bộ nhớ RAM.
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), tệp `wallet.dat` được bảo vệ bằng mã hóa AES-256 Passphrase. Tuy nhiên, khi người dùng nhập mật khẩu để kiểm tra số dư (`axq-master balance`) hoặc khai thác khối (`axq-master mine`), chuỗi khóa riêng tư (Private Key) bắt buộc phải được giải mã và lưu trữ trong bộ nhớ RAM.
 
 Nếu kẻ tấn công:
 1. Gắn thiết bị đọc trộm phần cứng (Hardware Interceptor) vào thanh RAM (Cold Boot Attack).

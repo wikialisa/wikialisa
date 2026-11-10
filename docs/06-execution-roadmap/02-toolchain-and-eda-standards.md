@@ -48,7 +48,7 @@ Dự án AXQ áp dụng chiến lược kết hợp linh hoạt giữa các côn
 
 ## 3. QUY CHUẨN TỰ ĐỘNG HÓA CI/CD CHO PHẦN CỨNG (HARDWARE CI/CD)
 
-Tương tự như quy trình tự động hóa nhân Linux trong [`DOCS.MD`](../../DOCS.MD), toàn bộ mã nguồn phần cứng trong repository đều được tự động kiểm tra qua GitHub Actions (`.github/workflows/hardware-ci.yml`):
+Tương tự như quy trình tự động hóa nhân Linux trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), toàn bộ mã nguồn phần cứng trong repository đều được tự động kiểm tra qua GitHub Actions (`.github/workflows/hardware-ci.yml`):
 
 1. **Bước 1 (Linting & Style Check):** Chạy `verible-verilog-lint` kiểm tra chuẩn viết code an toàn, không có chốt tín hiệu ngầm (no inferred latches).
 2. **Bước 2 (Unit Testing):** Chạy 1,500 bài test Cocotb mô phỏng các phép toán băm SHA-256, nhân điểm Secp256k1 và Poseidon.

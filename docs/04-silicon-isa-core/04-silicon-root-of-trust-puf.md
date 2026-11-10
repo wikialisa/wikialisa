@@ -5,7 +5,7 @@
 
 ## 1. NGUY CƠ BỊ ĐÁNH CẮP KHÓA VÀ HẠN CHẾ CỦA BỘ NHỚ LƯU TRỮ
 
-Trong tài liệu [`DOCS.MD`](../../DOCS.MD), khóa riêng tư của ví `wallet.dat` được lưu trên ổ đĩa máy chủ và bảo vệ bằng mật khẩu AES-256. Mặc dù chuẩn AES-256 về mặt toán học là an toàn, việc lưu trữ khóa dưới dạng tĩnh (Static Storage on Disk/Flash) luôn tiềm ẩn các nguy cơ:
+Trong tài liệu [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), khóa riêng tư của ví `wallet.dat` được lưu trên ổ đĩa máy chủ và bảo vệ bằng mật khẩu AES-256. Mặc dù chuẩn AES-256 về mặt toán học là an toàn, việc lưu trữ khóa dưới dạng tĩnh (Static Storage on Disk/Flash) luôn tiềm ẩn các nguy cơ:
 - Trích xuất dữ liệu qua chip Flash ROM hoặc bus bộ nhớ SPI.
 - Lực lượng tấn công có thể tháo rời ổ cứng để tấn công bẻ khóa ngoại tuyến (Offline Brute-Force).
 

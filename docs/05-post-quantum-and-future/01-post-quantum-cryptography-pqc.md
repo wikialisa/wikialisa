@@ -5,7 +5,7 @@
 
 ## 1. MỐI ĐE DỌA CỦA MÁY TÍNH LƯỢNG TỬ ĐỐI VỚI BLOCKCHAIN
 
-Trong [`DOCS.MD`](../../DOCS.MD), mạng lưới AXQ Chain và Bitcoin Core dựa trên thuật toán đường cong Elliptic (ECDSA Secp256k1).
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), mạng lưới AXQ Chain và Bitcoin Core dựa trên thuật toán đường cong Elliptic (ECDSA Secp256k1).
 - Khi máy tính lượng tử đạt quy mô hàng ngàn qubit vật lý (sử dụng thuật toán **Shor**), toàn bộ khóa riêng tư có thể bị đảo ngược từ khóa công khai chỉ trong vài phút.
 - Đối với một hạ tầng phần cứng có vòng đời phục vụ định chế hàng thập kỷ, việc chuẩn bị sẵn năng lực **Kháng lượng tử (Post-Quantum Readiness)** trên phiến silicon là yêu cầu sinh tử.
 

@@ -19,7 +19,7 @@ Mọi Tác nhân AI (AI Coding Agent như Antigravity, Cursor, Claude Code, GitH
 
 ---
 
-## 🎭 2. MA TRẬN 5 VAI TRÒ CHUYÊN BIỆT CỦA AGENT (SPECIALIZED AGENT ROLES)
+## 🎭 2. MA TRẬN 7 VAI TRÒ CHUYÊN BIỆT CỦA AGENT (SPECIALIZED AGENT ROLES)
 
 Khi nhận yêu cầu nhiệm vụ, Agent phải tự xác định và kích hoạt vai trò kỹ năng tương ứng:
 
@@ -30,8 +30,9 @@ flowchart TD
     Router -->|Thuật toán PoK & Entropy| R2["role:consensus-governor"]
     Router -->|Tường lửa & Mạng P2P| R3["role:network-warden"]
     Router -->|Mạch Logic & Mô phỏng EDA| R4["role:silicon-rtl"]
-    Router -->|Build ISO & Kiểm thử QEMU| R5["role:release-orchestrator"]
+    Router -->|Build ISO, Runner & CI/CD| R5["role:release-orchestrator"]
     Router -->|Giao Diện Web & Desktop Wayland| R6["role:gui-architect"]
+    Router -->|Kiểm Định Trợ Năng WCAG 2.2 AA| R7["role:accessibility-guardian"]
 ```
 
 ### 1. `role:kernel-sentinel` (Giám Hộ Nhân & Bảo Mật Ring 0)
@@ -52,14 +53,20 @@ flowchart TD
 - **Nhiệm vụ:** Thiết kế mô-đun SystemVerilog trong [`src/hardware/rtl/`](src/hardware/rtl/), kiểm định pipeline SHA-256 64 giai đoạn, chạy linter Verilator sạch lỗi 100%, kết nối Hardware Abstraction Layer (HAL).
 - **Giới hạn quyền:** Toàn quyền trong `src/hardware/`; cấm can thiệp vào cấu trúc FHS userland.
 
-### 5. `role:release-orchestrator` (Điều Phối Đóng Gói & Tự Động Hóa)
-- **Nhiệm vụ:** Biên dịch BusyBox tĩnh, đóng gói initramfs `xz -9 --extreme`, tạo kịch bản Expect kiểm thử tự động trên QEMU headless, đóng gói ISO bootable kép UEFI/BIOS (< 30MB) và phát hành GitHub Release.
+### 5. `role:release-orchestrator` (Điều Phối Đóng Gói, Runner & CI/CD)
+- **Nhiệm vụ:** Quản lý cấu hình hạ tầng máy chủ Runner tự lưu trữ tại [`infra/runner-images`](infra/runner-images) (Ubuntu, Windows, macOS VM templates), biên dịch BusyBox tĩnh, đóng gói initramfs `xz -9 --extreme`, tạo kịch bản kiểm thử tự động trên QEMU headless, đóng gói ISO bootable kép UEFI/BIOS (< 30MB) và phát hành GitHub Release.
+- **Tích hợp:** Phối hợp cùng `role:accessibility-guardian` để nhúng các bài kiểm định trợ năng vào pipeline runner CI/CD.
 - **Giới hạn quyền:** Toàn quyền điều phối CI/CD; cấm bypass bài kiểm tra QEMU nếu gặp lỗi.
 
 ### 6. `role:gui-architect` (Kiến Trúc Sư Giao Diện Web & Desktop)
 - **Nhiệm vụ:** Phát triển Wikialisa Web Control Center (Rust daemon + React SPA), ứng dụng AXQ Studio (Rust + Tauri v2) và bộ tổng hợp cửa sổ `Wikialisa-Shell` (Wayland native trên Smithay).
-- **Nguyên tắc bất biến:** Tuyệt đối KHÔNG đưa mã GUI vào nhân `Wikialisa Core OS`. Cấm sử dụng máy chủ đồ họa X11 (chỉ hỗ trợ Wayland để đảm bảo an ninh). Cấm sử dụng Electron để tiết kiệm RAM.
+- **Nguyên tắc bất biến:** Tuyệt đối KHÔNG đưa mã GUI vào nhân `Wikialisa Core OS`. Cấm sử dụng máy chủ đồ họa X11 (chỉ hỗ trợ Wayland để đảm bảo an ninh). Cấm sử dụng Electron để tiết kiệm RAM. Mọi thành phần UI phải vượt qua bài kiểm tra trợ năng của `role:accessibility-guardian`.
 - **Giới hạn quyền:** Toàn quyền trong `src/ui/`; cấm chỉnh sửa cờ bảo mật Ring 0 của nhân máy chủ.
+
+### 7. `role:accessibility-guardian` (Vệ Binh Trợ Năng & Kiểm Định WCAG 2.2 AA)
+- **Nhiệm vụ:** Vận hành và điều phối toàn bộ hệ thống router kỹ năng trong [`plugins/accessibility-agents`](plugins/accessibility-agents) (`accessibility-lead`, `web-accessibility-wizard`, `document-accessibility-wizard`, `markdown-a11y-assistant`). Kiểm soát chất lượng toàn bộ giao diện người dùng, tài liệu đặc tả, bảng điều khiển Web và ứng dụng Desktop theo tiêu chuẩn quốc tế WCAG 2.2 AA, Section 508 và ISO/IEC 40500.
+- **Nguyên tắc bất biến:** Tuyệt đối không dùng emoji hoặc ký tự trang trí phi chuẩn trong tài liệu để đảm bảo máy đọc màn hình (Screen Readers) hoạt động chính xác. Chặn (Block) mọi bản build UI vi phạm độ tương phản màu (< 4.5:1), thiếu nhãn ARIA hoặc không hỗ trợ điều hướng bàn phím hoàn toàn.
+- **Giới hạn quyền:** Toàn quyền kiểm duyệt và phủ quyết giao diện / tài liệu; cấm can thiệp vào logic thuật toán mật mã Ring 0.
 
 ---
 

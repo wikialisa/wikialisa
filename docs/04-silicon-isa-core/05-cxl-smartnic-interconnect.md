@@ -5,7 +5,7 @@
 
 ## 1. NÂNG CẤP TẦNG KẾT NỐI TỪ SOCKET SANG CXL 3.0
 
-Trong [`DOCS.MD`](../../DOCS.MD), việc truyền tải dữ liệu giữa các node dựa trên các cổng TCP Socket truyền thống. Khi quy mô cụm máy chủ mở rộng lên hàng ngàn máy chủ trong các trung tâm dữ liệu định chế tài chính, độ trễ mạng mạng cục bộ (LAN) và overhead của hệ điều hành trở thành nút thắt cổ chai lớn nhất.
+Trong [`WIKIALISA_CORE_IDEA.md`](../../WIKIALISA_CORE_IDEA.md), việc truyền tải dữ liệu giữa các node dựa trên các cổng TCP Socket truyền thống. Khi quy mô cụm máy chủ mở rộng lên hàng ngàn máy chủ trong các trung tâm dữ liệu định chế tài chính, độ trễ mạng mạng cục bộ (LAN) và overhead của hệ điều hành trở thành nút thắt cổ chai lớn nhất.
 
 Trong vi xử lý **AXQ-1**, chúng tôi tích hợp giao tiếp **Compute Express Link (CXL 3.0)** và bộ điều khiển mạng thông minh **AXQ SmartNIC**:
 - **CXL.mem & CXL.cache:** Cho phép các nhân AXQ-1 trên nhiều máy chủ vật lý khác nhau chia sẻ chung một không gian bộ nhớ duy nhất (Coherent Shared Memory Fabric) qua giao diện PCIe Gen5/Gen6 với độ trễ dưới **80 nano-giây**.

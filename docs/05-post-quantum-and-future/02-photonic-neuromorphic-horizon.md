@@ -46,5 +46,5 @@ Thay vì liên tục quét dữ liệu theo chu kỳ xung nhịp cố định (t
 
 ## 4. TỔNG KẾT VỊ THẾ DÀI HẠN CỦA DỰ ÁN
 
-Lộ trình phần cứng từ một script nhỏ trong `DOCS.MD` đến một nhân vi xử lý lượng tử/quang tử phản ánh khát vọng chuyển hóa công nghệ: biến **Wikialisa Core & AXQ Chain** từ một hệ điều hành máy chủ đơn thuần trở thành **nền tảng điện toán và định chế tài chính vững chắc, bền bỉ và tối tân nhất trong kỷ nguyên số**.
+Lộ trình phần cứng từ một script nhỏ trong `WIKIALISA_CORE_IDEA.md` đến một nhân vi xử lý lượng tử/quang tử phản ánh khát vọng chuyển hóa công nghệ: biến **Wikialisa Core & AXQ Chain** từ một hệ điều hành máy chủ đơn thuần trở thành **nền tảng điện toán và định chế tài chính vững chắc, bền bỉ và tối tân nhất trong kỷ nguyên số**.
 
