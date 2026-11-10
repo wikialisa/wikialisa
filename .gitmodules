@@ -1,0 +1,6 @@
+[submodule "plugins/accessibility-agents"]
+	path = plugins/accessibility-agents
+	url = https://github.com/wikialisa/accessibility-agents.git
+[submodule "infra/runner-images"]
+	path = infra/runner-images
+	url = https://github.com/wikialisalang/runner-images.git
