@@ -62,7 +62,7 @@ flowchart TD
 | Cấp độ | Tên thế hệ | Nền tảng thực thi | Thông lượng / Độ trễ | Cơ chế bảo vệ khóa | Trạng thái |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Gốc** | Source Tree Clone | GitHub `wikialisa/wikialisa.git` | - | Local Git Repository | Hoàn tất cấu hình |
-| **L0** | Userland Script | Bash / OpenSSL / Linux Userland | ~50 TPS / 20-50 ms | File mã hóa AES-256 | Đã có trong `DOCS.MD` |
+| **L0** | Userland Script | Bash / OpenSSL / Linux Userland | ~50 TPS / 20-50 ms | File mã hóa AES-256 | Đã có trong `WIKIALISA_CORE_IDEA.md` |
 | **L1** | Kernel Subsystem | Linux C Driver (`/dev/axq`) | ~2,500 TPS / 2-5 ms | Kernel Keyring / Ring 0 | Kế hoạch Phase 1 |
 | **L2** | Bare-metal Microkernel | Rust AXQ-NanoKernel (seL4-based) | ~25,000 TPS / 150 µs | Hardware Enclave (SGX/SEV) | Kế hoạch Phase 2 |
 | **L3** | FPGA Hardware IP | Xilinx UltraScale+ / Chisel RTL | ~250,000 TPS / 8 µs | FPGA Bitstream Encryption / BRAM | Kế hoạch Phase 3 |
@@ -83,9 +83,12 @@ docs/
 │   ├── 01-executive-summary.md                  # Tóm lược chiến lược & Định vị sản phẩm phần cứng
 │   ├── 02-evolutionary-matrix.md                # Ma trận kỹ thuật chi tiết qua các kỷ nguyên L0 - L5
 │   ├── 03-roles-skills-and-brand-governance.md  # Định chế vai trò kỹ năng & Phân quyền thương hiệu lõi
-│   └── 04-wikialisa-gui-architecture-and-roadmap.md # Kế hoạch kiến trúc giao diện đồ họa (Web & Desktop)
+│   ├── 04-wikialisa-gui-architecture-and-roadmap.md # Kế hoạch kiến trúc giao diện đồ họa (Web & Desktop)
+│   ├── 05-sovereign-namespace-and-mount-architecture.md # Không gian chủ quyền /wikialisa & Phân hệ axq
+│   ├── 06-runner-images-and-accessibility-agents-integration.md # Hợp nhất Runner Images & WCAG 2.2 AA
+│   └── 08-global-financial-network-and-tokenomics.md # Hệ thống tài chính toàn cầu & Luân chuyển Tokenomics
 ├── 01-baseline-and-kernel/                      # Kỷ nguyên 1: Đưa AXQ vào nhân Linux Kernel
-│   ├── 01-current-baseline-analysis.md          # Phân tích hiện trạng DOCS.MD (axq-master & điểm nghẽn)
+│   ├── 01-current-baseline-analysis.md          # Phân tích hiện trạng WIKIALISA_CORE_IDEA.md (axq-master & điểm nghẽn)
 │   ├── 02-linux-kernel-subsystem.md             # Thiết kế Driver /drivers/crypto/axq và Syscalls
 │   └── 03-hardware-entropy-pok.md               # Proof-of-Kernel cấp phần cứng (RDTSC, TRNG, PMU)
 ├── 02-baremetal-and-microkernel/                # Kỷ nguyên 2: Vi nhân độc lập & Fastpath siêu tốc
@@ -118,7 +121,7 @@ docs/
 
 1. **Hardware-Anchored Trust (Niềm tin neo vào phần cứng):** Khóa riêng tư và quyền xác thực không bao giờ được lộ ra bộ nhớ phần mềm thông thường; mọi phép toán ký và đồng thuận đều được thực hiện bên trong ranh giới vật lý của chip.
 2. **Zero-Overhead Determinism (Tính tiền định không độ trễ):** Loại bỏ hoàn toàn sự không chắc chắn (jitter) của hệ điều hành; mọi khối và giao dịch được xử lý trong số chu kỳ xung nhịp cố định.
-3. **Autonomous AI on Silicon (Trí tuệ nhân tạo tự trị trên bán dẫn):** Nhân vi xử lý tích hợp sẵn khối NPU chuyên dụng, cho phép tác nhân AI Agent Chain (`DOCS.MD`) tự suy luận mô hình và ký giao dịch trực tiếp bằng phần cứng mà không cần server host can thiệp.
+3. **Autonomous AI on Silicon (Trí tuệ nhân tạo tự trị trên bán dẫn):** Nhân vi xử lý tích hợp sẵn khối NPU chuyên dụng, cho phép tác nhân AI Agent Chain (`WIKIALISA_CORE_IDEA.md`) tự suy luận mô hình và ký giao dịch trực tiếp bằng phần cứng mà không cần server host can thiệp.
 4. **Full Backward Compatibility (Tương thích ngược hoàn hảo):** Cung cấp lớp trừu tượng phần cứng (HAL) để các lệnh CLI quen thuộc như `axq-master mine`, `axq-master balance` tiếp tục hoạt động mượt mà, nhưng được tăng tốc bởi nhân silicon bên dưới.
 
 ---
