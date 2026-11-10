@@ -92,6 +92,14 @@ Bao gồm 6 routers (accessibility-lead, web-wizard, document-wizard...) và hơ
 Đảm bảo mọi thành phần UI và tài liệu (Plain-ASCII) không có rào cản tiếp cận.""",
     "runner": """Phân hệ infra/runner-images cung cấp mẫu máy chủ runner tự lưu trữ (Ubuntu, Windows, macOS)
 để tự động hóa quá trình build nhân Linux, chạy mô phỏng Verilator và đóng gói ISO độc lập.""",
+    "dev_scenarios": """Hệ thống kiểm thử kịch bản phát triển hệ thống (Dev Test Scenarios) cho 3 tầng kiến trúc:
+1. Backend: Driver C Ring 0 (/dev/axq), Kconfig hardening, Zero-Trust Capabilities (etc/capabilities.conf).
+   Vai trò: role:kernel-sentinel & role:network-warden.
+2. Frontend: Kiến trúc Web Control Center (React/Vite/Tailwind) & AXQ Studio (Rust/Tauri v2), kiểm định WCAG 2.2 AA.
+   Vai trò: role:gui-architect & role:accessibility-guardian.
+3. Database & Sổ Cái: Proof-of-Kernel state engine, ví AES-256 PBKDF2 (~/.axq/wallet.dat), Btrfs storage.
+   Vai trò: role:consensus-governor.
+Lệnh thực thi: axq dev [all|backend|frontend|database].""",
 }
 
 
@@ -197,6 +205,15 @@ Ngôn ngữ: Tiếng Việt chuẩn mực kỹ thuật (hoặc tiếng Anh nếu
                 f"{SOVEREIGN_KNOWLEDGE['runner']}\n\n"
                 f"• Phân hệ: infra/runner-images\n"
                 f"• Trạng thái runner: gõ `axq runner status`.")
+
+    if any(k in p_lower for k in ["dev", "backend", "frontend", "database", "kich ban"]):
+        return (f"[{C_YELLOW}Wikialisa Core Knowledge{C_RESET} | {role['icon']} {role_name}]\n\n"
+                f"{SOVEREIGN_KNOWLEDGE['dev_scenarios']}\n\n"
+                f"• Kiểm thử toàn bộ: gõ `axq dev` hoặc `axq dev all`\n"
+                f"• Kiểm thử Backend: gõ `axq dev backend`\n"
+                f"• Kiểm thử Frontend: gõ `axq dev frontend`\n"
+                f"• Kiểm thử Database: gõ `axq dev database`\n"
+                f"• Kiểm thử RTL phần cứng: gõ `axq test`")
 
     # Phản hồi mặc định theo vai trò
     return (f"[{C_YELLOW}Wikialisa Core Knowledge{C_RESET} | {role['icon']} {role_name}]\n\n"
