@@ -292,20 +292,32 @@ function Start-InteractiveShell {
         }
         if ([string]::IsNullOrWhiteSpace($trimmed)) { continue }
 
+        # Tự động nhận diện cú pháp export kiểu Linux (export VAR="VAL")
+        if ($trimmed -match '^export\s+([a-zA-Z0-9_]+)=(.*)$') {
+            $varName = $matches[1]
+            $varVal = $matches[2].Trim('"', "'")
+            [System.Environment]::SetEnvironmentVariable($varName, $varVal, "Process")
+            Set-Item -Path "env:$varName" -Value $varVal
+            wsl -d Ubuntu bash -c "echo 'export $varName=\"$varVal\"' >> ~/.bashrc 2>/dev/null" 2>$null
+            Write-Host "[✔] Đã thiết lập biến môi trường `$env:$varName thành công (đồng bộ Windows & WSL)!" -ForegroundColor Green
+            continue
+        }
+
         $parts = -split $trimmed
         $cmd = $parts[0]
         $subArgs = if ($parts.Length -gt 1) { $parts[1..($parts.Length - 1)] } else { @() }
 
         switch ($cmd) {
-            "status" { Show-Status }
-            "info"   { Show-Status }
-            "help"   { Show-Help }
-            "drive"  { Get-DriveStatus }
-            "dev"    { Invoke-DevTest $subArgs[0] $subArgs[1] }
-            "mine"   { Invoke-Mine $subArgs[0] }
-            "wallet" { Invoke-Wallet $subArgs[0] }
-            "chat"   { python "$RootPath\bin\axq-chat.py" $subArgs }
-            "ai"     { python "$RootPath\bin\axq-chat.py" $subArgs }
+            "status"  { Show-Status }
+            "info"    { Show-Status }
+            "help"    { Show-Help }
+            "drive"   { Get-DriveStatus }
+            "dev"     { Invoke-DevTest $subArgs[0] $subArgs[1] }
+            "mine"    { Invoke-Mine $subArgs[0] }
+            "wallet"  { Invoke-Wallet $subArgs[0] }
+            "chat"    { python "$RootPath\bin\axq-chat.py" $subArgs }
+            "ai"      { python "$RootPath\bin\axq-chat.py" $subArgs }
+            "roadmap" { & "$RootPath\scripts\create_github_roadmap.ps1" @subArgs }
             "wsl"    {
                 $wslCmd = $subArgs -join " "
                 wsl -d Ubuntu bash -c "cd /wikialisa && $wslCmd"
@@ -343,6 +355,7 @@ switch ($Command.ToLower()) {
     "wallet"   { Invoke-Wallet $ArgsList[0] }
     "chat"     { python "$RootPath\bin\axq-chat.py" $ArgsList }
     "ai"       { python "$RootPath\bin\axq-chat.py" $ArgsList }
+    "roadmap"  { & "$RootPath\scripts\create_github_roadmap.ps1" @ArgsList }
     "wsl"      {
         $wslCmd = $ArgsList -join " "
         wsl -d Ubuntu bash -c "cd /wikialisa && $wslCmd"

@@ -185,6 +185,9 @@ case "$1" in
         printf "  Mục tiêu build : Linux bzImage < 8MB, Verilator Simulation, ISO Dual-Boot\n"
         printf "${C_GREEN}[✔] Hạ tầng Runner sẵn sàng tích hợp với accessibility-agents!${C_RESET}\n"
         ;;
+    roadmap)
+        bash "$ROOT_DIR/scripts/create_github_roadmap.sh" "$@"
+        ;;
     help|--help|-h) cmd_help ;;
     "")          
         print_banner
